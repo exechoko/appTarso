@@ -6,9 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -48,6 +54,9 @@ import java.util.ArrayList;
 
 public class MenuEstudiantesActivity extends AppCompatActivity {
 
+    private static final int PERMISO_ALMACENAMIENTO = 1000;
+    boolean permisos_ok = false;
+
     Spinner spinCursos, spinAsignatura;
     Button btnVerTrabajos, btnVerMisTrabajos, btnSubirTrabajos, btnSalir;
     String c="";
@@ -56,6 +65,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
     Usuarios usuario;
     TextView txtNombre;
+    Documentos doc;
 
     RecyclerView recycler_trabajos;
     LinearLayoutManager layoutManager;
@@ -187,7 +197,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                final Documentos doc = documentos;
+                doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
 
@@ -198,12 +208,29 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     }
                 });
 
-                String destinoPath = Environment.DIRECTORY_DOWNLOADS;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+                //String destinoPath = Environment.getExternalStorageDirectory(Environment.DIRECTORY_DOWNLOADS);//Environment.DIRECTORY_DOWNLOADS;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //VERIFICAR PERMISOS
+                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                                //Denegado, solicitarlo
+                                String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                                //Dialogo emergente
+                                requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
+
+                            } else {
+                                iniciarDescarga(doc.getUrl());
+                            }
+                        } else {
+                            iniciarDescarga(doc.getUrl());
+                        }*/
+
+
                         Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                        //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
+                        //downloadFile(getApplicationContext(), doc.getNombre(), "", destinoPath, doc.getUrl());
+                        downloadFile(doc);
                     }
                 });
 
@@ -231,7 +258,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
         alert.setView(todosLosTrabajos);
 
-        alert.setNegativeButton("DESHACER", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 adapter.stopListening();
@@ -242,6 +269,75 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
         alert.show();
     }
+
+    private void downloadFile(Documentos doc) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(doc.getUrl()));
+        //Tipo de red
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        request.setTitle("Descarga");
+        request.setDescription("Descargando archivo ... ");
+
+        //request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre());
+
+        //Obtener el servicio
+        DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+    }
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISO_ALMACENAMIENTO:{
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //Permiso otorgado
+                    //permisos_ok = true;
+                    iniciarDescarga(doc.getUrl());
+                } else {
+                    Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }*/
+
+    /*private void iniciarDescarga(String url) {
+        //if (permisos_ok){
+            //Solicitud de descarga
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            //Tipo de red
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+            request.setTitle("Descarga");
+            request.setDescription("Descargando archivo ... ");
+
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + System.currentTimeMillis());
+
+            //Obtener el servicio
+            DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+            manager.enqueue(request);
+
+        //} else {
+        //    Toast.makeText(this, "Permisos denegados", Toast.LENGTH_SHORT).show();
+        //}
+
+    }*/
+
+    private void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
+        DownloadManager downloadmanager = (DownloadManager) context.
+                getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        request.setDescription("Descargando archivo...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context, destinationDirectory, fileName + fileExtension);
+
+        downloadmanager.enqueue(request);
+    }
+
+
 
     private void cargarUsuario(String id) {
         db.collection("Usuarios")
@@ -357,7 +453,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         alert.setView(misTrabajos);
 
 
-        alert.setNegativeButton("DESHACER", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 adapter.stopListening();
