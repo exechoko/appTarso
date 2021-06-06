@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Pablo de Tarso</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Inst. Gestión Social Pablo de Tarso</string>
+    <string name="nav_header_subtitle">Fund. Presencia Presente</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Inicio</string>
+    <string name="menu_gallery">Estudiantes</string>
+    <string name="menu_slideshow">Profesores</string>
+    <string name="menu_utilidades">Herramientas</string>
+    <string name="menu_radio">Radio FM Tarso</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="Cursos">
+        <item>Seleccione</item>
+        <item>1º año</item>
+        <item>2º año</item>
+        <item>3º año</item>
+        <item>4º año</item>
+        <item>5º año</item>
+        <item>6º año</item>
+    </string-array>
+
+    <string-array name="Asignaturas">
+        <item>Seleccione</item>
+        <item>Matemática</item>
+        <item>Lengua y Literatura</item>
+        <item>Historia</item>
+        <item>Ética y ciudadana</item>
+        <item>Educación Fisica</item>
+        <item>Física aplicada</item>
+        <item>Química</item>
+    </string-array>
+
+</resources>

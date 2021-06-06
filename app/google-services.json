@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "665037275706",
+    "firebase_url": "https://tarso-99d0b-default-rtdb.firebaseio.com",
+    "project_id": "tarso-99d0b",
+    "storage_bucket": "tarso-99d0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665037275706:android:c2e785b06094ec8ed1eb03",
+        "android_client_info": {
+          "package_name": "com.example.tarso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665037275706-lahte72hgduk1dmkfiaqah1rnpd4tbuf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tarso",
+            "certificate_hash": "32aa1ff6cd47b6e080c01d8968d6825aaba5088a"
+          }
+        },
+        {
+          "client_id": "665037275706-8ao2giuq6108uupb0kq0fj95s78lanjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-XrBzNhUrV_aqmCCoUaM7eLynbwdyHDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665037275706-8ao2giuq6108uupb0kq0fj95s78lanjp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

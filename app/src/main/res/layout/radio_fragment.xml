@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/radio_background"
+    tools:context=".ui.radio.RadioFragment">
+
+    <RelativeLayout
+        android:id="@+id/radio_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
+            android:minHeight="20dip"
+            android:maxHeight="20dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="20dip"
+            android:layout_below="@id/logo"/>
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/pablodetarso"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/btnAudioStream"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logo"
+            android:layout_marginTop="70dp"
+            android:enabled="true"
+            android:textSize="18sp"
+            android:text="Escuchar Radio"
+            android:textColor="@color/white"
+            android:backgroundTint="#A88E0E0E"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/btnStopAudioStream"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnAudioStream"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:backgroundTint="#A8450707"
+            android:textColor="@color/white"
+            android:text="Detener Radio"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</FrameLayout>

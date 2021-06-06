@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_educ">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MenuEstudiantesActivity">
+
+        <TextView
+            android:id="@+id/nombrePersona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenid@ usuario"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/salir"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/power_off"
+            android:layout_margin="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"            />
+
+        <TextView
+            android:id="@+id/txtTrabajo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="59dp"
+            android:text="Trabajos prácticos"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/salir" />
+
+        <TextView
+            android:id="@+id/txtView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Curso"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/spinnerCurso"
+            app:layout_constraintTop_toBottomOf="@id/txtTrabajo"
+            tools:layout_editor_absoluteX="15dp" />
+
+        <Spinner
+            android:id="@+id/spinnerCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="#AAAAAA"
+            android:entries="@array/Cursos"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="@+id/txtView"
+            app:layout_constraintTop_toBottomOf="@id/txtView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Asignatura"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/spinnerAsignatura"
+            app:layout_constraintTop_toBottomOf="@id/spinnerCurso"
+            tools:layout_editor_absoluteY="329dp" />
+
+        <Spinner
+            android:id="@+id/spinnerAsignatura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="#AAAAAA"
+            android:entries="@array/Asignaturas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+        <Button
+            android:id="@+id/btnTrabajos"
+            android:layout_width="242dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:text="BUSCAR TRABAJOS"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerAsignatura" />
+
+
+        <TextView
+            android:id="@+id/txtMisTrabajos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Ver mis trabajos realizados"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnTrabajos"
+            tools:layout_editor_absoluteX="15dp" />
+
+        <Button
+            android:id="@+id/btnVerMisTrabajos"
+            android:layout_width="180dp"
+            android:layout_height="44dp"
+            android:backgroundTint="#A898B302"
+            android:text="Mis trabajos"
+            app:layout_constraintEnd_toStartOf="@id/btnSubirMisTrabajos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+
+        <Button
+            android:id="@+id/btnSubirMisTrabajos"
+            android:layout_width="180dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#A8C50000"
+            android:text="SUBIR TRABAJO"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnVerMisTrabajos"
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</ScrollView>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.tarso">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_tarso"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_tarso_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Tarso">
+        <activity android:name=".NoticiasActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".TrabajosDocentesActivity"
+            android:parentActivityName=".MenuDocentesActivity" />
+        <activity
+            android:name=".TrabajosActivity"
+            android:parentActivityName=".MenuEstudiantesActivity" />
+        <activity
+            android:name=".MenuEstudiantesActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MenuDocentesActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".TraductorActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".QuimicaActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".MapasActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".calculadoraActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Tarso.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
