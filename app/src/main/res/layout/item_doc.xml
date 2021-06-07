@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:layout_margin="8dp"
     app:cardCornerRadius="10dp"
@@ -15,6 +15,7 @@
         <ImageView
             android:id="@+id/doc_imagen"
             android:src="@drawable/icon_pdf"
+            android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:layout_width="75dp"
             android:layout_height="75dp" />
@@ -43,12 +44,48 @@
             android:layout_marginStart="10dp"/>
 
         <TextView
+            android:id="@+id/doc_creador"
+            android:text="Realizado por:"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_toRightOf="@id/doc_imagen"
+            android:layout_below="@id/doc_materia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
             android:id="@+id/doc_fecha"
             android:text="25/07/2021"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:layout_toRightOf="@id/doc_imagen"
-            android:layout_below="@id/doc_materia"
+            android:layout_below="@id/doc_creador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:id="@+id/doc_nota"
+            android:text="Nota"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_toRightOf="@id/doc_imagen"
+            android:layout_below="@id/doc_fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:id="@+id/doc_concepto"
+            android:text="Concepto"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_toRightOf="@id/doc_imagen"
+            android:layout_below="@id/doc_fecha"
+            android:layout_toEndOf="@id/doc_nota"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"/>

@@ -160,6 +160,13 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
             }
         });
+        
+        btnSubirTrabajos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSubirTrabajo();
+            }
+        });
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +176,10 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         });
 
         cargarUsuario(id);
+    }
+
+    private void dialogSubirTrabajo() {
+        //agregar el dialog para subir un pdf del menuDocentes
     }
 
     private void buscarTrabajosDialog(String c, String a, String id) {
@@ -200,6 +211,10 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
+                holder.doc_nota.setText(documentos.getNota());
+                holder.doc_concepto.setText(documentos.getConcepto());
+                holder.doc_creador.setText(documentos.getCreador());
+
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -227,13 +242,11 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                             iniciarDescarga(doc.getUrl());
                         }*/
 
-
                         Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                         //downloadFile(getApplicationContext(), doc.getNombre(), "", destinoPath, doc.getUrl());
                         downloadFile(doc);
                     }
                 });
-
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
@@ -282,7 +295,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre());
 
         //Obtener el servicio
-        DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
     }
 
@@ -325,8 +338,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     }*/
 
     private void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
-        DownloadManager downloadmanager = (DownloadManager) context.
-                getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager downloadmanager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(url);
         DownloadManager.Request request = new DownloadManager.Request(uri);
 
@@ -408,9 +420,12 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                final Documentos doc = documentos;
+                doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
+                holder.doc_nota.setText(documentos.getNota());
+                holder.doc_concepto.setText(documentos.getConcepto());
+                holder.doc_creador.setText(documentos.getCreador());
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -419,10 +434,11 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     }
                 });
 
-                String destinoPath = Environment.DIRECTORY_DOWNLOADS;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+                //String destinoPath = Environment.DIRECTORY_DOWNLOADS;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        downloadFile(doc);
                         Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                         //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
                     }
