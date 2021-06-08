@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".MenuEstudiantesActivity">
+        tools:context=".MenuEstudiantesActivity"
+        android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/nombrePersona"
@@ -103,6 +104,7 @@
             android:layout_height="44dp"
             android:layout_marginTop="10dp"
             android:text="BUSCAR TRABAJOS"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,6 +132,7 @@
             android:layout_height="44dp"
             android:backgroundTint="#A898B302"
             android:text="Mis trabajos"
+            android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@id/btnSubirMisTrabajos"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
@@ -141,6 +144,7 @@
             android:layout_marginStart="5dp"
             android:backgroundTint="#A8C50000"
             android:text="SUBIR TRABAJO"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnVerMisTrabajos"
             app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />

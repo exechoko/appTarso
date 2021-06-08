@@ -311,7 +311,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         progressDialog.setTitle("Subir archivo");
         progressDialog.show();
 
-        StorageReference reference = storageReference.child("materia/" + System.currentTimeMillis() + ".pdf");
+        StorageReference reference = storageReference.child(mat +"/" + edtNombreTrabajo.getText().toString() + ".pdf");
 
         reference.putFile(data)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -327,8 +327,6 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                         String thisDate = currentDate.format(todayDate);
 
                         document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), uri.toString(), id);
-
-
 
                         Toast.makeText(MenuEstudiantesActivity.this, "Archivo subido correctamente", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
