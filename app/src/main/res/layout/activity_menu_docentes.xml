@@ -9,7 +9,48 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".MenuDocentesActivity">
+        tools:context=".MenuDocentesActivity"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:id="@+id/perfilDocente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageButton
+                android:id="@+id/fotoPerfilDocente"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_work"
+                android:backgroundTint="@color/white"/>
+
+            <TextView
+                android:id="@+id/nombreDocente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/fotoPerfilDocente"
+                android:text="Bienvenid@ usuario"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                />
+
+            <ImageButton
+                android:id="@+id/salir"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/power_off"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/txtNoticias"
@@ -24,13 +65,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/perfilDocente" />
 
         <Button
             android:id="@+id/btnSubirNoticia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SUBIR NOTICIA/COMUNICADO"
+            android:text="SUBIR IMAGEN\nCON NOTICIA/COMUNIC."
+            android:backgroundTint="#771B8F20"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtNoticias"/>

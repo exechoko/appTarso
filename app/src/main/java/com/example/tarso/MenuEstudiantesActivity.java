@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,7 +68,8 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     boolean permisos_ok = false;
 
     Spinner spinCursos, spinAsignatura;
-    Button btnVerTrabajos, btnVerMisTrabajos, btnSubirTrabajos, btnSalir;
+    Button btnVerTrabajos, btnVerMisTrabajos, btnSubirTrabajos;
+    ImageButton btnFotoPerfilEstudiante, btnSalir;
     String c="";
     String a="";
     String id="";
@@ -95,10 +97,11 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_estudiantes);
 
-        txtNombre = findViewById(R.id.nombrePersona);
+        txtNombre = findViewById(R.id.nombreEstudiante);
         btnVerTrabajos = findViewById(R.id.btnTrabajos);
         btnVerMisTrabajos = findViewById(R.id.btnVerMisTrabajos);
         btnSubirTrabajos = findViewById(R.id.btnSubirMisTrabajos);
+        btnFotoPerfilEstudiante = findViewById(R.id.fotoPerfilEstudiante);
         btnSalir = findViewById(R.id.salir);
 
         mAuth = FirebaseAuth.getInstance();
@@ -583,9 +586,12 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
+                holder.doc_creador.setText(documentos.getCreador());
+                holder.doc_materia.setText(documentos.getMateria());
+                holder.doc_fecha.setText(documentos.getFecha());
                 holder.doc_nota.setText(documentos.getNota());
                 holder.doc_concepto.setText(documentos.getConcepto());
-                holder.doc_creador.setText(documentos.getCreador());
+
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override

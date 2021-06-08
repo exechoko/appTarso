@@ -14,14 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tarso.Adapter.SliderData;
 import com.example.tarso.model.Documentos;
+import com.example.tarso.model.Usuarios;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -36,9 +42,13 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String a="";
     String idProfesor="";
     Button btnSubirNoticia, btnVerTrabajos, btnSeleccionarTrabajo, btnSubirTrabajo;
+    ImageButton btnFotoPerfilDocente, btnSalir;
 
     FirebaseFirestore db;
     StorageReference storageReference, storageReferenceNews;
+
+    Usuarios usuario;
+    TextView txtNombre;
 
     private static final int PICK_IMAGE = 100;
 
@@ -51,6 +61,8 @@ public class MenuDocentesActivity extends AppCompatActivity {
         btnVerTrabajos = findViewById(R.id.btnVerTrabajo);
         btnSeleccionarTrabajo = findViewById(R.id.btnSeleccionarTrabajo);
         btnSubirTrabajo = findViewById(R.id.btnSubirTrabajo);
+        btnFotoPerfilDocente = findViewById(R.id.fotoPerfilDocente);
+        btnSalir = findViewById(R.id.salir);
 
         if (getIntent()!=null){
             idProfesor = getIntent().getStringExtra("IDDOCENTE");
@@ -133,6 +145,29 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 seleccionarTrabajo();
             }
         });
+
+        cargarUsuario(idProfesor);
+    }
+
+    private void cargarUsuario(String idProfesor) {
+        db.collection("Usuarios")
+                .whereEqualTo("id", idProfesor)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                usuario = document.toObject(Usuarios.class);
+                                txtNombre.setText("Bienvenid@ " + usuario.getNombre());
+                                //esProfesor = user.getIsProfesor();
+                                //Log.d(TAG, esProfesor);
+
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        }
+                    }
+                });
     }
 
     private void openGallery() {
