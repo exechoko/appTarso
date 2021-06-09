@@ -210,6 +210,9 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         edtNombreTrabajo = agregar_trabajo.findViewById(R.id.edtNombreTrabajo);
         edtNombreCreador = agregar_trabajo.findViewById(R.id.edtNombreCreador);
 
+        edtNombreCreador.setText(usuario.getNombre());
+        edtNombreCreador.setEnabled(false);
+
         //Spinners
         spin_curso_agregar_trab = agregar_trabajo.findViewById(R.id.spinCurso);
         spin_asig_agregar_trab = agregar_trabajo.findViewById(R.id.spinMateria);
@@ -346,7 +349,6 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 });
     }
 
-
     private void buscarTrabajosDialog(String c, String a, String id) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MenuEstudiantesActivity.this)
                 .setTitle("Trabajos para entregar de \n" + a + " - " + c + "º año.")
@@ -376,10 +378,11 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
+                holder.doc_materia.setText(documentos.getMateria());
                 holder.doc_nota.setText(documentos.getNota());
+                holder.doc_fecha.setText(documentos.getFecha());
                 holder.doc_concepto.setText(documentos.getConcepto());
                 holder.doc_creador.setText(documentos.getCreador());
-
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -393,7 +396,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //VERIFICAR PERMISOS
-                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
                                 //Denegado, solicitarlo
                                 String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -401,15 +404,17 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                                 requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
 
                             } else {
-                                iniciarDescarga(doc.getUrl());
+                                Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                                downloadFile(doc);
                             }
                         } else {
-                            iniciarDescarga(doc.getUrl());
-                        }*/
+                            Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                            downloadFile(doc);
+                        }
 
-                        Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                         //downloadFile(getApplicationContext(), doc.getNombre(), "", destinoPath, doc.getUrl());
-                        downloadFile(doc);
+                        //downloadFile(doc);
                     }
                 });
 
@@ -464,20 +469,20 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         manager.enqueue(request);
     }
 
-    /*@Override
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
             case PERMISO_ALMACENAMIENTO:{
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //Permiso otorgado
                     //permisos_ok = true;
-                    iniciarDescarga(doc.getUrl());
+                    downloadFile(doc);
                 } else {
                     Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();
                 }
             }
         }
-    }*/
+    }
 
     /*private void iniciarDescarga(String url) {
         //if (permisos_ok){
@@ -524,7 +529,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 usuario = document.toObject(Usuarios.class);
-                                txtNombre.setText("Bienvenid@ " + usuario.getNombre());
+                                txtNombre.setText("Bienvenid@ Estudiante\n" + usuario.getNombre());
                                 //esProfesor = user.getIsProfesor();
                                 //Log.d(TAG, esProfesor);
 
@@ -545,7 +550,8 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         mAuth.signOut();
                         Toast.makeText(getApplicationContext(),"Hasta luego",Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(MenuEstudiantesActivity.this,MainActivity.class));
+                        Intent irAlMenuPrincipal = new Intent(MenuEstudiantesActivity.this, MainActivity.class);
+                        startActivity(irAlMenuPrincipal);
                         finish();
                     }
                 })
@@ -660,5 +666,12 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         if (adapter!=null){
             adapter.stopListening();
         }
+        mAuth.signOut();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mAuth.signOut();
     }
 }

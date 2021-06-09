@@ -37,7 +37,7 @@ public class SlideshowFragment extends Fragment {
     private static final String TAG = "FIRESTORE PROFESOR";
     FirebaseFirestore db;
     Usuarios user;
-    String esProfesor = "NO";
+    String esProfesor = "";
     private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,26 +63,33 @@ public class SlideshowFragment extends Fragment {
         btnIngresarProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                comprobarProfesor(emailProf.getText().toString());
-                mAuth.signInWithEmailAndPassword(emailProf.getText().toString(), passProf.getText().toString())
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful() && esProfesor.equals("YES")) {
-                                    Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
-                                    Intent irMenuDocentes = new Intent(getContext(), MenuDocentesActivity.class);
-                                    irMenuDocentes.putExtra("IDDOCENTE", mAuth.getCurrentUser().getUid());
-                                    startActivity(irMenuDocentes);
-                                } else {
-                                    Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Profesor", Toast.LENGTH_SHORT).show();
 
-                                }
-                            }
-                        });
+                comprobarProfesor(emailProf.getText().toString());
+                iniciarSesion(emailProf.getText().toString(), passProf.getText().toString());
+
+
             }
         });
 
         return root;
+    }
+
+    private void iniciarSesion(String email, String pass) {
+        mAuth.signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful() && esProfesor.equals("YES")) {
+                            Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
+                            Intent irMenuDocentes = new Intent(getContext(), MenuDocentesActivity.class);
+                            irMenuDocentes.putExtra("IDDOCENTE", mAuth.getCurrentUser().getUid());
+                            startActivity(irMenuDocentes);
+                        } else {
+                            Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Profesor", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 
     private void comprobarProfesor(String e) {
@@ -106,7 +113,7 @@ public class SlideshowFragment extends Fragment {
                     }
                 });
     }
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -119,5 +126,10 @@ public class SlideshowFragment extends Fragment {
         } else {
             // No user is signed in
         }
+    }*/
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

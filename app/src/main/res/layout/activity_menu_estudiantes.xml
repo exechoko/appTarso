@@ -52,15 +52,11 @@
 
         </RelativeLayout>
 
-
-
-
-
         <TextView
             android:id="@+id/txtTrabajo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="59dp"
+            android:layout_marginTop="39dp"
             android:text="Trabajos prácticos"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -68,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/perfil" />
+            app:layout_constraintTop_toBottomOf="@id/perfil" />
 
         <TextView
             android:id="@+id/txtView"

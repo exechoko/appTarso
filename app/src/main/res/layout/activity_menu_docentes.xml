@@ -56,7 +56,7 @@
             android:id="@+id/txtNoticias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="39dp"
+            android:layout_marginTop="29dp"
             android:text="Noticias y Comunicados"
             android:textColor="@color/white"
             android:background="@color/black"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/perfilDocente" />
+            app:layout_constraintTop_toBottomOf="@id/perfilDocente" />
 
         <Button
             android:id="@+id/btnSubirNoticia"
@@ -154,7 +154,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spinnerAsignatura" />
 
+
+        <TextView
+            android:id="@+id/txtMisTrabajos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Ver mis trabajos realizados"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnVerTrabajo"
+            tools:layout_editor_absoluteX="15dp" />
+
         <Button
+            android:id="@+id/btnVerMisTrabajos"
+            android:layout_width="180dp"
+            android:layout_height="44dp"
+            android:backgroundTint="#A898B302"
+            android:text="Mis trabajos"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/btnSubirMisTrabajos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+
+        <Button
+            android:id="@+id/btnSubirMisTrabajos"
+            android:layout_width="180dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="#A8C50000"
+            android:text="SUBIR TRABAJO"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnVerMisTrabajos"
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+
+        <!--Button
             android:id="@+id/btnSeleccionarTrabajo"
             android:layout_width="242dp"
             android:layout_height="44dp"
@@ -176,7 +215,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSeleccionarTrabajo" />
+            app:layout_constraintTop_toBottomOf="@id/btnSeleccionarTrabajo" /-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

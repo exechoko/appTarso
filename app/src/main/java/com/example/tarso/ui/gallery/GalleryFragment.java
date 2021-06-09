@@ -35,7 +35,7 @@ public class GalleryFragment extends Fragment {
 
     FirebaseFirestore db;
     Usuarios user;
-    String esProfesor = "NO";
+    String esProfesor = "";
 
     private FirebaseAuth mAuth;
     /*FirebaseDatabase database;
@@ -62,34 +62,39 @@ public class GalleryFragment extends Fragment {
         pass = root.findViewById(R.id.edtPass);
         btnIngresar = root.findViewById(R.id.btnIngresar);
 
+
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 comprobarProfesor(email.getText().toString());
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                if (task.isSuccessful() && esProfesor.equals("NO")) {
-                                    Log.d(TAG, "Es estudiante");
-                                    Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
-                                    Intent irMenuEstudent = new Intent(getContext(), MenuEstudiantesActivity.class);
-                                    irMenuEstudent.putExtra("IDESTUDIANTE", mAuth.getCurrentUser().getUid());
-                                    startActivity(irMenuEstudent);
-                                } else {
-                                    Log.d(TAG, "Es profesor");
-                                    Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Estudiante", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        });
+                iniciarSesion(email.getText().toString(), pass.getText().toString());
 
             }
         });
 
         return root;
+    }
+
+    private void iniciarSesion(String email, String pass) {
+        mAuth.signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (task.isSuccessful() && esProfesor.equals("NO")) {
+                            Log.d(TAG, "Es estudiante");
+                            Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
+                            Intent irMenuEstudent = new Intent(getContext(), MenuEstudiantesActivity.class);
+                            irMenuEstudent.putExtra("IDESTUDIANTE", mAuth.getCurrentUser().getUid());
+                            startActivity(irMenuEstudent);
+                        } else {
+                            Log.d(TAG, "Es profesor");
+                            Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Estudiante", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 
     private void comprobarProfesor(String e) {
@@ -114,7 +119,7 @@ public class GalleryFragment extends Fragment {
                 });
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -126,7 +131,7 @@ public class GalleryFragment extends Fragment {
         } else {
             // No user is signed in
         }
-    }
+    }*/
 
     @Override
     public void onStop() {

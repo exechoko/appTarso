@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         {
             case R.id.item_noticias:
                 //Hacer algo cuando presionen noticias
-                Toast.makeText(this, "IR A PANTALLA CON NOTICIAS", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "IR A PANTALLA CON NOTICIAS", Toast.LENGTH_SHORT).show();
                 Intent irNoticias = new Intent(MainActivity.this, NoticiasActivity.class);
                 startActivity(irNoticias);
                 break;
