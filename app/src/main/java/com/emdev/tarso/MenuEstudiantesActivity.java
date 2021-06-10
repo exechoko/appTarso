@@ -459,7 +459,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                         Date todayDate = new Date();
                         String thisDate = currentDate.format(todayDate);
 
-                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), uri.toString(), id);
+                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), "NO",uri.toString(), id);
 
                         Toast.makeText(MenuEstudiantesActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
@@ -495,7 +495,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                         Date todayDate = new Date();
                         String thisDate = currentDate.format(todayDate);
 
-                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), uri.toString(), id);
+                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), "NO",uri.toString(), id);
 
                         Toast.makeText(MenuEstudiantesActivity.this, "Archivo subido correctamente", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
@@ -527,7 +527,8 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         Query query = db.collection("Documentos")
                 .whereEqualTo("curso", c)
                 .whereEqualTo("materia", a)
-                .whereNotEqualTo("id", id);
+                .whereEqualTo("creadorIsProfesor", "YES")//creador del documento tiene que ser profesor
+                .whereNotEqualTo("id", id); //no los propios
         //.orderBy("fecha", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Documentos> options = new FirestoreRecyclerOptions.Builder<Documentos>()

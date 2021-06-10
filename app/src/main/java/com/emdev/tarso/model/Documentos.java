@@ -6,6 +6,7 @@ public class Documentos {
     String materia;
     String fecha;
     String creador;
+    String creadorIsProfesor; //YES o NO
     String url;
     String nota;
     String concepto;
@@ -14,16 +15,25 @@ public class Documentos {
     public Documentos() {
     }
 
-    public Documentos(String nombre, String curso, String materia, String fecha, String creador, String url, String id) {
+    public Documentos(String nombre, String curso, String materia, String fecha, String creador, String creadorIsProfesor, String url, String id) {
         this.nombre = nombre;
         this.curso = curso;
         this.materia = materia;
         this.fecha = fecha;
         this.creador = creador;
+        this.creadorIsProfesor = creadorIsProfesor;
         this.url = url;
         this.nota = "Sin nota";
         this.concepto = "Sin concepto";
         this.id = id;
+    }
+
+    public String getCreadorIsProfesor() {
+        return creadorIsProfesor;
+    }
+
+    public void setCreadorIsProfesor(String creadorIsProfesor) {
+        this.creadorIsProfesor = creadorIsProfesor;
     }
 
     public String getId() {

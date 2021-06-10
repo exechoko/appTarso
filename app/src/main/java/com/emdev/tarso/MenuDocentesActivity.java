@@ -200,7 +200,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         btnSubirMisTrabajos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogSubirTrabajo();
+                dialogSubirTrabajo(usuario);
             }
         });
 
@@ -214,7 +214,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         cargarUsuario(idProfesor);
     }
 
-    private void dialogSubirTrabajo() {
+    private void dialogSubirTrabajo(Usuarios usuario) {
         final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuDocentesActivity.this)
                 .setTitle("Subir trabajo ... ")
                 .setCancelable(false);
@@ -224,6 +224,8 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
         edtNombreTrabajo = agregar_trabajo.findViewById(R.id.edtNombreTrabajo);
         edtNombreCreador = agregar_trabajo.findViewById(R.id.edtNombreCreador);
+        edtNombreCreador.setText(usuario.getNombre());
+        edtNombreCreador.setEnabled(false);
 
         //Spinners
         spin_curso_agregar_trab = agregar_trabajo.findViewById(R.id.spinCurso);
@@ -664,7 +666,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                         Date todayDate = new Date();
                         String thisDate = currentDate.format(todayDate);
 
-                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, "Profe " + edtNombreCreador.getText().toString(), uri.toString(), idProfesor);
+                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, "Profe " + edtNombreCreador.getText().toString(), "YES",uri.toString(), idProfesor);
 
                         Toast.makeText(MenuDocentesActivity.this, "Archivo subido correctamente", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();

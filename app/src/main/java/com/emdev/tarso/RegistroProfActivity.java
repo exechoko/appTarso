@@ -80,7 +80,7 @@ public class RegistroProfActivity extends AppCompatActivity {
                             //Crea la cuenta estudiante y la agrega a la coleccion Usuarios
                             Usuarios estudiante = new Usuarios(edtNombreProf.getText().toString(), pass, edtDniProf.getText().toString(), correo, "NO", edtTelefonoProf.getText().toString(), user.getUid());
                             SolicitudProfesor nuevaSolicitud = new SolicitudProfesor(edtNombreProf.getText().toString(),edtDniProf.getText().toString(), correo, edtTelefonoProf.getText().toString(), user.getUid());
-                            String uid = String.valueOf(System.currentTimeMillis());
+                            String uid = user.getUid();
                             db.collection("Usuarios").document(uid).set(estudiante);
                             db.collection("SolicitudesProfesores").document(uid).set(nuevaSolicitud);
 

@@ -78,7 +78,7 @@ public class RegistroEstActivity extends AppCompatActivity {
 
                             //Crea la cuenta estudiante y la agrega a la coleccion Usuarios
                             Usuarios estudiante = new Usuarios(edtNombre.getText().toString(), pass, edtDni.getText().toString(), correo, "NO", edtTelefono.getText().toString(), user.getUid());
-                            String uid = String.valueOf(System.currentTimeMillis());
+                            String uid = user.getUid();
                             db.collection("Usuarios").document(uid).set(estudiante);
 
                             //Una vez crea la cuenta redigir al Menu Estudiante pasame ID para cargar perfil
