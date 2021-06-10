@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edtNombreCreador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellido y Nombre"
+            android:text=""
+            android:textSize="18sp"
+            android:inputType="textMultiLine"/>
+
+        <EditText
+            android:id="@+id/edtNombreTrabajo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del trabajo"
+            android:text=""
+            android:textSize="18sp"
+            android:inputType="textMultiLine"/>
+
+        <EditText
+            android:id="@+id/edtNota"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nota del trabajo"
+            android:text=""
+            android:textSize="18sp"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/edtConcepto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Concepto del trabajo"
+            android:text=""
+            android:textSize="18sp"
+            android:inputType="textMultiLine"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

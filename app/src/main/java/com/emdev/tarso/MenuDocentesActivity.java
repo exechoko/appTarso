@@ -20,7 +20,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -81,7 +83,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     Documentos doc;
 
     //Para subir un trabajo
-    EditText edtNombreCreador, edtNombreTrabajo;
+    EditText edtNombreCreador, edtNombreTrabajo, edtNota, edtConcepto;
     Spinner spin_curso_agregar_trab, spin_asig_agregar_trab;
     Button btnSelect, btnUpload;
     String cur="";
@@ -422,6 +424,8 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
+
+
                 doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
@@ -465,18 +469,19 @@ public class MenuDocentesActivity extends AppCompatActivity {
                             downloadFile(doc);
                         }
 
-                        //Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                        //downloadFile(doc);
                     }
                 });
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(MenuDocentesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
-                        /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
+                        //Toast.makeText(MenuDocentesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
+                        Log.d("KeyDocumento", adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+                        agregarNota(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId(), doc);
                     }
                 });
+
+
             }
 
             @NonNull
@@ -674,6 +679,75 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    /*@Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        //Log.d("KeyDocumento", adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+        if (item.getTitle().equals("AGREGAR NOTA")){
+            agregarNota(adapter.getSnapshots().getSnapshot(item.getOrder()).getId(), adapter.getItem(item.getOrder()));
+        } else if (item.getTitle().equals("AGREGAR CONCEPTO")){
+            //agregarConcepto(adapter.getSnapshots().getSnapshot(item.getOrder()).getId(), adapter.getItem(item.getOrder()));
+        }
+
+        return super.onContextItemSelected(item);
+    }*/
+
+    private void agregarNota(String docID, Documentos item) {
+        AlertDialog.Builder dialogoNota = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("CALIFICAR")
+                .setCancelable(false);
+
+        LayoutInflater inflater2 = this.getLayoutInflater();
+        View agregar_nota_concepto = inflater2.inflate(R.layout.agregar_nota_concepto, null);
+
+        edtNombreTrabajo = agregar_nota_concepto.findViewById(R.id.edtNombreTrabajo);
+        edtNombreCreador = agregar_nota_concepto.findViewById(R.id.edtNombreCreador);
+        edtNota = agregar_nota_concepto.findViewById(R.id.edtNota);
+        edtConcepto = agregar_nota_concepto.findViewById(R.id.edtConcepto);
+
+        edtNombreCreador.setText(item.getCreador());
+        edtNombreTrabajo.setEnabled(false);
+        edtNombreTrabajo.setText(item.getNombre());
+        edtNombreCreador.setEnabled(false);
+        edtNota.setText(item.getNota());
+        edtConcepto.setText(item.getConcepto());
+
+        dialogoNota.setView(agregar_nota_concepto);
+
+        dialogoNota.setPositiveButton("ACTUALIZAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (edtNombreCreador.getText().toString().equals("")
+                        || edtNombreTrabajo.getText().toString().equals("")
+                        || edtNota.getText().toString().equals("")
+                        || edtConcepto.getText().toString().equals("")) {
+                    Toast.makeText(MenuDocentesActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                } else {
+                    item.setNombre(edtNombreTrabajo.getText().toString());
+                    item.setCreador(edtNombreCreador.getText().toString());
+                    item.setNota(edtNota.getText().toString());
+                    item.setConcepto(edtConcepto.getText().toString());
+
+                    //item es el documento que estamos actualizando
+                    db.collection("Documentos").document(docID).set(item);
+
+                    Toast.makeText(MenuDocentesActivity.this, "Datos actualizados", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        dialogoNota.setNegativeButton("DESHACER", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+
+            }
+        });
+
+        dialogoNota.show();
     }
 
     @Override

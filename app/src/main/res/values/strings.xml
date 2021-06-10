@@ -30,10 +30,37 @@
         <item>Matemática</item>
         <item>Lengua y Literatura</item>
         <item>Historia</item>
+        <item>Geografía</item>
+        <item>Ingles</item>
         <item>Ética y ciudadana</item>
+        <item>Tecnología</item>
+        <item>Físicoquímica</item>
+        <item>Biología</item>
+        <item>TIC</item>
+        <item>Cs. de la Tierra</item>
+        <item>Lit. Latinoamericana</item>
+        <item>Bioética</item>
+        <item>Artes Visuales</item>
+        <item>Música</item>
         <item>Educación Fisica</item>
-        <item>Física aplicada</item>
-        <item>Química</item>
+        <item>Intro. a la Investigación</item>
+        <item>Práctica Educativa</item>
+        <item>Proy. Artes Visuales - Ed. Física</item>
+        <item>Proy. Artes Visuales - Música</item>
+        <item>Proy. Artes Visuales - Lengua</item>
+        <item>Proy. Artes Visuales - Biología</item>
+        <item>Proy. Artes Visuales - Matemática</item>
+        <item>Proy. Ed. Física - Geografía</item>
+        <item>Proy. Historia - Ética y ciudadana</item>
+        <item>Proy. Historia - Música</item>
+        <item>Proy. Tecnología - Música</item>
+        <item>Proy. Tecnología - Lengua y Lit.</item>
+        <item>Proy. Lengua - Ingles</item>
+        <item>Proy. Economía - Ecología</item>
+        <item>Trienal Sociales (Hist. - Geog. - Ética - Lengua)</item>
+        <item>Trienal Nat-Cs.Exactas (Mat. - Fis. y Quim.)</item>
+        <item>Trienal Est-Exp. (A. Vis. - Ed. Fisica - Mus.)</item>
+
     </string-array>
 
 </resources>

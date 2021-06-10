@@ -1,5 +1,6 @@
 package com.emdev.tarso.ViewHolder;
 
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.emdev.tarso.Interface.ItemClickListener;
 import com.emdev.tarso.R;
 
-public class DocumentosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class DocumentosViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener, View.OnCreateContextMenuListener {
 
     public ImageView doc_imagen, doc_download, doc_compartir;
     public TextView doc_nombre, doc_materia, doc_fecha, doc_nota, doc_concepto, doc_creador;
@@ -30,7 +32,11 @@ public class DocumentosViewHolder extends RecyclerView.ViewHolder implements Vie
         doc_download = (ImageView) itemView.findViewById(R.id.descargar);
         doc_compartir = (ImageView) itemView.findViewById(R.id.compartir);
 
+        //click para cada item
         itemView.setOnClickListener(this);
+
+        //para el menu contextual de las categorias (cuando mantenes apretado)
+        itemView.setOnCreateContextMenuListener((View.OnCreateContextMenuListener) this);
 
     }
 
@@ -42,4 +48,14 @@ public class DocumentosViewHolder extends RecyclerView.ViewHolder implements Vie
     public void onClick(View v) {
         itemClickListener.onClick(v,getAdapterPosition(),false);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.setHeaderTitle("Selecciona una acción");
+
+        menu.add(0,0,getAdapterPosition(), "AGREGAR NOTA");
+        menu.add(0,1,getAdapterPosition(), "AGREGAR CONCEPTO");
+
+    }
+
 }
