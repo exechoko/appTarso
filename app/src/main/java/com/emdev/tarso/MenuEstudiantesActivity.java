@@ -6,18 +6,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +45,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,6 +56,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,6 +64,7 @@ import java.util.Date;
 public class MenuEstudiantesActivity extends AppCompatActivity {
 
     private static final int PERMISO_ALMACENAMIENTO = 1000;
+    private static final int PICK_IMAGE = 100;
     boolean permisos_ok = false;
 
     Spinner spinCursos, spinAsignatura;
@@ -191,9 +199,127 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     }
 
     private void dialogSubirTrabajo() {
+        //El usuario seleccionará subir el trabajo en imagen o PDF
+        MaterialAlertDialogBuilder menu_contextual = new MaterialAlertDialogBuilder(MenuEstudiantesActivity.this)
+                .setTitle("Elegi el formato del trabajo")
+                .setMessage("Puede ser una imagen o un archivo PDF")
+                .setCancelable(true);
+
+        menu_contextual.setPositiveButton("SUBIR IMAGEN", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                dialogImagen();
+            }
+        }).setNeutralButton("SUBIR PDF", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                dialogPDF();
+            }
+        });
+
+        menu_contextual.show();
+
+    }
+
+    private void dialogImagen() {
+        //Toast.makeText(this, "Subir imagen", Toast.LENGTH_SHORT).show();
+        final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuEstudiantesActivity.this)
+                .setTitle("Subir trabajo en imagen ... ")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View agregar_trabajo = inflater.inflate(R.layout.agregar_trabajo, null);
+
+        edtNombreTrabajo = agregar_trabajo.findViewById(R.id.edtNombreTrabajo);
+        edtNombreCreador = agregar_trabajo.findViewById(R.id.edtNombreCreador);
+
+        edtNombreCreador.setText(usuario.getNombre());
+        edtNombreCreador.setEnabled(false);
+
+        //Spinners
+        spin_curso_agregar_trab = agregar_trabajo.findViewById(R.id.spinCurso);
+        spin_asig_agregar_trab = agregar_trabajo.findViewById(R.id.spinMateria);
+        ArrayAdapter<CharSequence> adapterCursos = ArrayAdapter.createFromResource(this,
+                R.array.Cursos, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterAsignatura = ArrayAdapter.createFromResource(this,
+                R.array.Asignaturas, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapterCursos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterAsignatura.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spin_curso_agregar_trab.setAdapter(adapterCursos);
+        spin_asig_agregar_trab.setAdapter(adapterAsignatura);
+
+        spin_curso_agregar_trab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cur = String.valueOf(parent.getItemIdAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spin_asig_agregar_trab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mat = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        btnSelect = agregar_trabajo.findViewById(R.id.btnSelect);
+        btnUpload = agregar_trabajo.findViewById(R.id.btnUpload);
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seleccionarImagen();
+            }
+        });
+
+        alerta.setView(agregar_trabajo);
+        alerta.setPositiveButton("Agregar archivo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (edtNombreCreador.getText().toString().equals("")
+                        || edtNombreTrabajo.getText().toString().equals("")
+                        || mat.equals("") || mat.equals("Seleccione") || cur.equals("") || cur.equals("0")) {
+                    Toast.makeText(MenuEstudiantesActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                } else if (document != null){
+                    String uid = String.valueOf(System.currentTimeMillis());
+                    db.collection("Documentos").document(uid).set(document);
+                }
+            }
+        });
+
+        alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta.show();
+    }
+
+    private void seleccionarImagen() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    private void dialogPDF() {
         //agregar el dialog para subir un pdf del menuDocentes
         final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuEstudiantesActivity.this)
-                .setTitle("Subir trabajo ... ")
+                .setTitle("Subir trabajo en PDF ... ")
                 .setCancelable(false);
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -291,7 +417,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
         if (requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
             btnUpload.setEnabled(true);
-            btnSelect.setText("Archivo selec.");
+            btnSelect.setText("ARC. selec.");
 
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -300,8 +426,53 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     Log.d("Nombre uri", data.toString());
                 }
             });
+        } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
+            btnUpload.setEnabled(true);
+            btnSelect.setText("IMG. selec.");
 
+            btnUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    subirImagen(data.getData());
+                }
+            });
         }
+
+
+    }
+
+    private void subirImagen(Uri data) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Subir imagen");
+        progressDialog.show();
+
+        StorageReference reference = storageReference.child(mat +"/" + edtNombreTrabajo.getText().toString() + ".jpg");
+        reference.putFile(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete());
+                        Uri uri = uriTask.getResult();
+
+                        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+                        Date todayDate = new Date();
+                        String thisDate = currentDate.format(todayDate);
+
+                        document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), uri.toString(), id);
+
+                        Toast.makeText(MenuEstudiantesActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progress = (100.0 * snapshot.getBytesTransferred())/snapshot.getTotalByteCount();
+                        progressDialog.setMessage("Subiendo archivo... " + (int) progress + "%");
+                    }
+                });
+
     }
 
     private void subirArchivoPDF(Uri data) {
@@ -375,6 +546,12 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_fecha.setText(documentos.getFecha());
                 holder.doc_concepto.setText(documentos.getConcepto());
                 holder.doc_creador.setText(documentos.getCreador());
+
+                if (doc.getUrl().contains(".pdf")){
+                    Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
+                } else if (doc.getUrl().contains(".jpg")){
+                    Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
+                }
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -589,6 +766,12 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_fecha.setText(documentos.getFecha());
                 holder.doc_nota.setText(documentos.getNota());
                 holder.doc_concepto.setText(documentos.getConcepto());
+
+                if (doc.getUrl().contains(".pdf")){
+                    Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
+                } else if (doc.getUrl().contains(".jpg")){
+                    Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
+                }
 
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {

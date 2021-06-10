@@ -160,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Ver mis trabajos realizados"
+            android:text="Trabajos Practicos "
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -187,35 +187,11 @@
             android:layout_height="44dp"
             android:layout_marginStart="5dp"
             android:backgroundTint="#A8C50000"
-            android:text="SUBIR TRABAJO"
+            android:text="NUEVO TRABAJO"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnVerMisTrabajos"
             app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
-
-        <!--Button
-            android:id="@+id/btnSeleccionarTrabajo"
-            android:layout_width="242dp"
-            android:layout_height="44dp"
-            android:text="SELEC. NUEVO TRABAJO"
-            android:backgroundTint="#778F891B"
-            android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnVerTrabajo" />
-
-        <Button
-            android:id="@+id/btnSubirTrabajo"
-            android:layout_width="242dp"
-            android:layout_height="44dp"
-            android:text="SUBIR NUEVO TRABAJO"
-            android:backgroundTint="#771B8F20"
-            android:enabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSeleccionarTrabajo" /-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

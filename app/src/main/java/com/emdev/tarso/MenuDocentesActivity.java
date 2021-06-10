@@ -52,6 +52,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -335,6 +336,11 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_nota.setText(documentos.getNota());
                 holder.doc_concepto.setText(documentos.getConcepto());
 
+                if (doc.getUrl().contains(".pdf")){
+                    Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
+                } else if (doc.getUrl().contains(".jpg")){
+                    Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
+                }
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -425,6 +431,11 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_concepto.setText(documentos.getConcepto());
                 holder.doc_creador.setText(documentos.getCreador());
 
+                if (doc.getUrl().contains(".pdf")){
+                    Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
+                } else if (doc.getUrl().contains(".jpg")){
+                    Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
+                }
 
                 holder.doc_compartir.setOnClickListener(new View.OnClickListener() {
                     @Override
