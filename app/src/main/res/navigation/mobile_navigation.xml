@@ -7,31 +7,31 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.tarso.ui.home.HomeFragment"
+        android:name="com.emdev.tarso.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.tarso.ui.gallery.GalleryFragment"
+        android:name="com.emdev.tarso.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.tarso.ui.slideshow.SlideshowFragment"
+        android:name="com.emdev.tarso.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
         android:id="@+id/nav_utilidades"
-        android:name="com.example.tarso.ui.utilidades.UtilidadesFragment"
+        android:name="com.emdev.tarso.ui.utilidades.UtilidadesFragment"
         android:label="@string/menu_utilidades"
         tools:layout="@layout/utilidades_fragment" />
 
     <fragment
         android:id="@+id/nav_radio"
-        android:name="com.example.tarso.ui.radio.RadioFragment"
+        android:name="com.emdev.tarso.ui.radio.RadioFragment"
         android:label="@string/menu_radio"
         tools:layout="@layout/radio_fragment" />
 </navigation>

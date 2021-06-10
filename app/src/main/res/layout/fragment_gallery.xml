@@ -18,44 +18,67 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
-            android:textColorHint="@color/white"
+            android:ems="10"
             android:hint="Correo"
+            android:inputType="textEmailAddress"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textStyle="bold"
-            android:text=""
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edtPass"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textColorHint="@color/white"
-            android:hint="Contraseña"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:text=""
             android:ems="10"
+            android:hint="Contraseña"
             android:inputType="numberPassword"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtEmail"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtEmail" />
 
         <Button
             android:id="@+id/btnIngresar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="30dp"
             android:text="INGRESAR"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtPass"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtPass" />
+
+        <TextView
+            android:id="@+id/olvideClaveEst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Olvidé mi clave"
+            android:clickable="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/btnIngresar"
+            app:layout_constraintTop_toBottomOf="@id/btnIngresar" />
+
+        <Button
+            android:id="@+id/btnRegistrarEst"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:backgroundTint="#A8048319"
+            android:text="REGISTRARSE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnIngresar" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
