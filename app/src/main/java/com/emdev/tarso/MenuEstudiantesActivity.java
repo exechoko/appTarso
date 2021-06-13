@@ -624,15 +624,23 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     }
 
     private void downloadFile(Documentos doc) {
+
+        String extension = "";
+        if (doc.getUrl().contentEquals(".pdf")){
+            extension = ".pdf";
+        } else if (doc.getUrl().contentEquals(".jpg")){
+            extension = ".jpg";
+        }
+
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(doc.getUrl()));
         //Tipo de red
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle("Descarga");
+        request.setTitle(doc.getNombre());
         request.setDescription("Descargando archivo ... ");
 
         //request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre());
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre() + extension);
 
         //Obtener el servicio
         DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);
