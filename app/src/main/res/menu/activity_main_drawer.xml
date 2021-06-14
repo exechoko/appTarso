@@ -29,7 +29,7 @@
             android:icon="@drawable/ic_herramienta"
             android:title="@string/menu_utilidades" />
         <item
-            android:id="@+id/nav_radio"
+            android:id="@+id/radioActivity"
             android:icon="@drawable/ic_radio"
             android:title="@string/menu_radio" />
 

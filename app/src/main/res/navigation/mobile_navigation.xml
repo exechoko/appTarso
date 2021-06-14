@@ -29,9 +29,14 @@
         android:label="@string/menu_utilidades"
         tools:layout="@layout/utilidades_fragment" />
 
-    <fragment
+    <!--fragment
         android:id="@+id/nav_radio"
         android:name="com.emdev.tarso.ui.radio.RadioFragment"
         android:label="@string/menu_radio"
-        tools:layout="@layout/radio_fragment" />
+        tools:layout="@layout/radio_fragment" /-->
+    <activity
+        android:id="@+id/radioActivity"
+        android:name="com.emdev.tarso.RadioActivity"
+        android:label="activity_radio"
+        tools:layout="@layout/activity_radio" />
 </navigation>

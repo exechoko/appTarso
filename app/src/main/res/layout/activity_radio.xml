@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@drawable/radio_background"
-    tools:context=".ui.radio.RadioFragment">
+    tools:context=".RadioActivity">
 
     <RelativeLayout
         android:id="@+id/radio_main"
@@ -16,7 +16,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ProgressBar
+        <!--ProgressBar
             android:id="@+id/progressBar1"
             android:indeterminateOnly="false"
             android:progressDrawable="@android:drawable/progress_horizontal"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="20dip"
             android:layout_marginRight="20dip"
             android:layout_marginTop="20dip"
-            android:layout_below="@id/logo"/>
+            android:layout_below="@id/logo"/-->
 
         <ImageView
             android:id="@+id/logo"
@@ -39,26 +39,28 @@
             android:layout_centerHorizontal="true"/>
 
         <ImageButton
-            android:id="@+id/btnAudioStream"
-            android:layout_width="250dp"
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/logo"
             android:layout_marginTop="70dp"
             android:enabled="true"
             android:textSize="18sp"
-            android:src="@drawable/ic_play"
-            android:textColor="@color/white"
-            android:backgroundTint="#A88E0E0E"
+            android:src="@drawable/play"
+            android:backgroundTint="#00FFFFFF"
             android:layout_centerHorizontal="true"/>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titulo de la cancion"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="25sp"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:layout_below="@id/btnAudioStream"/>
+            android:textColor="#000000"
+            android:layout_below="@id/play"/>
 
         <!--Button
             android:id="@+id/btnStopAudioStream"
@@ -75,4 +77,4 @@
 
     </RelativeLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
