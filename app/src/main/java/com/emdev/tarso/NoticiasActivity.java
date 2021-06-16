@@ -42,10 +42,10 @@ public class NoticiasActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         // calling our method to load images.
-        loadImages();
+        loadNoticias();
     }
 
-    private void loadImages() {
+    private void loadNoticias() {
         // getting data from our collection and after
         // that calling a method for on success listener.
         db.collection("Slider").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

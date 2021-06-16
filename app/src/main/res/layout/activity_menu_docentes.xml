@@ -9,16 +9,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".MenuDocentesActivity"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        tools:context=".MenuDocentesActivity">
 
         <RelativeLayout
             android:id="@+id/perfilDocente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/fotoPerfilDocente"
@@ -27,20 +27,19 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/ic_work"
-                android:backgroundTint="@color/white"/>
+                android:backgroundTint="@color/white" />
 
             <TextView
                 android:id="@+id/nombreDocente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/fotoPerfilDocente"
-                android:text="Bienvenid@ usuario"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:textColor="@color/white"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                />
+                android:layout_toRightOf="@id/fotoPerfilDocente"
+                android:text="Bienvenid@ usuario"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/salir"
@@ -48,7 +47,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/power_off"/>
+                android:background="@drawable/power_off" />
 
         </RelativeLayout>
 
@@ -57,9 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="29dp"
+            android:background="@color/black"
             android:text="Noticias y Comunicados"
             android:textColor="@color/white"
-            android:background="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,19 +70,31 @@
             android:id="@+id/btnSubirNoticia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SUBIR IMAGEN\nCON NOTICIA/COMUNIC."
             android:backgroundTint="#771B8F20"
+            android:text="SUBIR IMG.\nCON NOT./COMUNIC."
+            android:layout_marginLeft="15dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtNoticias" />
+
+        <Button
+            android:id="@+id/btnAdmNoticia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="31dp"
+            android:backgroundTint="#A8C50000"
+            android:layout_marginEnd="15dp"
+            android:text="ADMINISTRAR\nNOTICIAS"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtNoticias"/>
+            app:layout_constraintStart_toEndOf="@+id/btnSubirNoticia"
+            app:layout_constraintTop_toBottomOf="@id/txtNoticias" />
 
         <TextView
             android:id="@+id/txtTrabajo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="39dp"
-            android:text="Trabajos prácticos"
             android:background="@color/black"
+            android:text="Trabajos prácticos"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -96,8 +107,8 @@
             android:id="@+id/txtView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Curso"
             android:background="@color/black"
+            android:text="Curso"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -122,9 +133,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@color/black"
             android:text="Asignatura"
             android:textColor="@color/white"
-            android:background="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/spinnerAsignatura"
@@ -147,8 +158,8 @@
             android:id="@+id/btnVerTrabajo"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:text="VER TRABAJOS"
             android:layout_marginTop="10dp"
+            android:text="VER TRABAJOS"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

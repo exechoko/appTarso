@@ -65,7 +65,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String c="";
     String a="";
     String idProfesor="";
-    Button btnSubirNoticia, btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos;
+    Button btnSubirNoticia, btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos, btnAdminNoticias;
     ImageButton btnFotoPerfilDocente, btnSalir;
 
     FirebaseFirestore db;
@@ -106,6 +106,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         btnVerMisTrabajos = findViewById(R.id.btnVerMisTrabajos);
         btnSubirMisTrabajos = findViewById(R.id.btnSubirMisTrabajos);
         btnFotoPerfilDocente = findViewById(R.id.fotoPerfilDocente);
+        btnAdminNoticias = findViewById(R.id.btnAdmNoticia);
         btnSalir = findViewById(R.id.salir);
 
         txtNombre = findViewById(R.id.nombreDocente);
@@ -201,6 +202,14 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogSubirTrabajo(usuario);
+            }
+        });
+
+        btnAdminNoticias.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //crear customdialog para cargar las noticias en un recyclerview y poder eliminarlas
+                Toast.makeText(MenuDocentesActivity.this, "Administrar noticias", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -640,7 +649,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                         while (!uriTask.isComplete());
                         Uri uri = uriTask.getResult();
 
-                        SliderData noticia = new SliderData(uri.toString());
+                        SliderData noticia = new SliderData(uri.toString(), usuario.getNombre());
                         String id = String.valueOf(System.currentTimeMillis());
                         db.collection("Slider").document(id).set(noticia);
 
