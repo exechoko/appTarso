@@ -14,6 +14,8 @@
         android:layout_margin="10dp"
         android:scrollbars="vertical">
 
+        <!--
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnCalc"
             android:layout_width="100dp"
@@ -85,6 +87,85 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/apps"
             app:layout_constraintTop_toBottomOf="@id/btnMapas" />
+
+        -->
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Visualizador de trabajos"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/materias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/titulo">
+
+            <TextView
+                android:id="@+id/txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asignatura: "
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinMateria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:entries="@array/Asignaturas" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/curso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/materias">
+
+            <TextView
+                android:id="@+id/txtView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Curso: "
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinCurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:entries="@array/Cursos" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/verTrabajos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar trabajos"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#88000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/curso" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

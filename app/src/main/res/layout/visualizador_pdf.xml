@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titulo_visualizador"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center"
+            android:text="Archivo"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfVisualizador"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+
+        <Button
+            android:id="@+id/cancel_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:background="@null"
+            android:text="Salir" />
+    </LinearLayout>
+</RelativeLayout>
