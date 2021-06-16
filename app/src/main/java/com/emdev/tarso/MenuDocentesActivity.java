@@ -276,7 +276,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         });
 
         alerta.setView(agregar_trabajo);
-        alerta.setPositiveButton("Agregar archivo", new DialogInterface.OnClickListener() {
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (edtNombreCreador.getText().toString().equals("")
@@ -286,6 +286,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 } else if (document != null){
                     String uid = String.valueOf(System.currentTimeMillis());
                     db.collection("Documentos").document(uid).set(document);
+                    Toast.makeText(MenuDocentesActivity.this, "Agregado correctamente", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -425,8 +426,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
         adapter = new FirestoreRecyclerAdapter<Documentos, DocumentosViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
-
-
 
                 doc = documentos;
 
@@ -608,12 +607,16 @@ public class MenuDocentesActivity extends AppCompatActivity {
         if (requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
             btnUpload.setEnabled(true);
             btnSelect.setText("Archivo selec.");
+            btnSelect.setEnabled(false);
 
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     subirArchivoPDF(data.getData());
+                    btnUpload.setEnabled(false);
                     Log.d("Nombre uri", data.toString());
+
                 }
             });
 
@@ -676,7 +679,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
                         document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, "Profe " + edtNombreCreador.getText().toString(), "YES",uri.toString(), idProfesor);
 
-                        Toast.makeText(MenuDocentesActivity.this, "Archivo subido correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuDocentesActivity.this, "Archivo subido a la nube\nPresione CONFIRMAR", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
                     }
@@ -726,7 +729,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
         dialogoNota.setView(agregar_nota_concepto);
 
-        dialogoNota.setPositiveButton("ACTUALIZAR", new DialogInterface.OnClickListener() {
+        dialogoNota.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

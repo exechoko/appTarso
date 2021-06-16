@@ -287,7 +287,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         });
 
         alerta.setView(agregar_trabajo);
-        alerta.setPositiveButton("Agregar archivo", new DialogInterface.OnClickListener() {
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (edtNombreCreador.getText().toString().equals("")
@@ -380,7 +380,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         });
 
         alerta.setView(agregar_trabajo);
-        alerta.setPositiveButton("Agregar archivo", new DialogInterface.OnClickListener() {
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (edtNombreCreador.getText().toString().equals("")
@@ -418,22 +418,26 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         if (requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
             btnUpload.setEnabled(true);
             btnSelect.setText("ARC. selec.");
+            btnSelect.setEnabled(false);
 
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     subirArchivoPDF(data.getData());
+                    btnUpload.setEnabled(false);
                     Log.d("Nombre uri", data.toString());
                 }
             });
         } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
             btnUpload.setEnabled(true);
             btnSelect.setText("IMG. selec.");
+            btnSelect.setEnabled(false);
 
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     subirImagen(data.getData());
+                    btnUpload.setEnabled(false);
                 }
             });
         }
@@ -461,7 +465,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
                         document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), "NO",uri.toString(), id);
 
-                        Toast.makeText(MenuEstudiantesActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuEstudiantesActivity.this, "Imagen subida a la nube\nPresione CONFIRMAR", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 })
@@ -469,7 +473,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                         double progress = (100.0 * snapshot.getBytesTransferred())/snapshot.getTotalByteCount();
-                        progressDialog.setMessage("Subiendo archivo... " + (int) progress + "%");
+                        progressDialog.setMessage("Subiendo imagen... " + (int) progress + "%");
                     }
                 });
 
@@ -497,7 +501,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
                         document = new Documentos(edtNombreTrabajo.getText().toString(), cur, mat, thisDate, edtNombreCreador.getText().toString(), "NO",uri.toString(), id);
 
-                        Toast.makeText(MenuEstudiantesActivity.this, "Archivo subido correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuEstudiantesActivity.this, "Archivo subido a la nube\nPresione CONFIRMAR", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
                     }

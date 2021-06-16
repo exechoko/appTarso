@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".MenuDocentesActivity"
-        android:layout_margin="20dp">
+        android:layout_margin="10dp">
 
         <RelativeLayout
             android:id="@+id/perfilDocente"

@@ -33,8 +33,16 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent Email = new Intent(Intent.ACTION_SEND);
+                Email.setType("text/email");
+                Email.putExtra(Intent.EXTRA_EMAIL,
+                        new String[]{"pablodetarso@fundacionpresenciapresente.org.ar"});  //developer 's email
+                Email.putExtra(Intent.EXTRA_SUBJECT,
+                        "Consulta de App Pablo de Tarso"); // Email 's Subject
+                Email.putExtra(Intent.EXTRA_TEXT, "Buenos días," + "");  //Email 's Greeting text
+                startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                Snackbar.make(view, "Enviar correo", Snackbar.LENGTH_LONG)
+                        .setAction("Correo", null).show();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
