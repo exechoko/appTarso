@@ -113,18 +113,24 @@ public class GalleryFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if (task.isSuccessful() && esProfesor.equals("NO")) {
-                            Log.d(TAG, "Es estudiante");
-                            Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
-                            Intent irMenuEstudent = new Intent(getContext(), MenuEstudiantesActivity.class);
-                            irMenuEstudent.putExtra("IDESTUDIANTE", mAuth.getCurrentUser().getUid());
-                            startActivity(irMenuEstudent);
+                        if (esProfesor.equals("NO")){
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Es estudiante");
+
+                                Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
+                                Intent irMenuEstudent = new Intent(getContext(), MenuEstudiantesActivity.class);
+                                irMenuEstudent.putExtra("IDESTUDIANTE", mAuth.getCurrentUser().getUid());
+                                startActivity(irMenuEstudent);
+                            } else {
+                                Toast.makeText(getActivity(), "Fallo el ingreso, verifique CORREO y CONTRASEÑA", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Log.d(TAG, "Es profesor");
                             Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Estudiante", Toast.LENGTH_SHORT).show();
-
                         }
                         mDialog.dismiss();
+
+
                     }
                 });
     }

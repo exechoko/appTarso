@@ -114,14 +114,18 @@ public class SlideshowFragment extends Fragment {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful() && esProfesor.equals("YES")) {
-                            Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
-                            Intent irMenuDocentes = new Intent(getContext(), MenuDocentesActivity.class);
-                            irMenuDocentes.putExtra("IDDOCENTE", mAuth.getCurrentUser().getUid());
-                            startActivity(irMenuDocentes);
+
+                        if (esProfesor.equals("YES")){
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity(), "Ingreso correcto", Toast.LENGTH_SHORT).show();
+                                Intent irMenuDocentes = new Intent(getContext(), MenuDocentesActivity.class);
+                                irMenuDocentes.putExtra("IDDOCENTE", mAuth.getCurrentUser().getUid());
+                                startActivity(irMenuDocentes);
+                            } else {
+                                Toast.makeText(getActivity(), "Fallo el ingreso, verifique CORREO y CONTRASEÑA", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Profesor", Toast.LENGTH_SHORT).show();
-
                         }
                         mDialog.dismiss();
                     }
