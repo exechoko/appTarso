@@ -4,16 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,11 +40,13 @@ import android.widget.Toast;
 import com.emdev.tarso.Adapter.SliderData;
 import com.emdev.tarso.Interface.ItemClickListener;
 import com.emdev.tarso.ViewHolder.DocumentosViewHolder;
+import com.emdev.tarso.ViewHolder.SliderDataViewHolder;
 import com.emdev.tarso.model.Documentos;
 import com.emdev.tarso.model.Usuarios;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +60,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -77,6 +88,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
     //Para descargar un trabajo
     private static final int PERMISO_ALMACENAMIENTO = 1000;
+    //private static final int PERMISO_LECTURA = 1001;
     RecyclerView recycler_trabajos;
     LinearLayoutManager layoutManager;
     FirestoreRecyclerAdapter<Documentos, DocumentosViewHolder> adapter;
@@ -89,6 +101,10 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String cur="";
     String mat="";
     Documentos document;
+
+    //Para ver las noticias
+    FirestoreRecyclerAdapter<SliderData, SliderDataViewHolder> adapterNoticias;
+    SliderData slider_noti;
 
     private FirebaseAuth mAuth;
 
@@ -185,7 +201,27 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MenuDocentesActivity.this, "Subir una imagen con la noticia", Toast.LENGTH_SHORT).show();
-                openGallery();
+                //openGallery();
+                dialogSubirNoticia(usuario);
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
+                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                        //Denegado, solicitarlo
+                        ActivityCompat.requestPermissions(MenuDocentesActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISO_ALMACENAMIENTO);
+                        //ActivityCompat.requestPermissions(MenuDocentesActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISO_ALMACENAMIENTO);
+                        //String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        //Dialogo emergente
+                        //requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
+
+                    } else {
+                        Toast.makeText(MenuDocentesActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
+                        CropImage.startPickImageActivity(MenuDocentesActivity.this);
+                    }
+                } else {
+                    Toast.makeText(MenuDocentesActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
+                    CropImage.startPickImageActivity(MenuDocentesActivity.this);
+                }*/
+
             }
         });
 
@@ -210,6 +246,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //crear customdialog para cargar las noticias en un recyclerview y poder eliminarlas
                 Toast.makeText(MenuDocentesActivity.this, "Administrar noticias", Toast.LENGTH_SHORT).show();
+                dialogAdministrarNoticias();
             }
         });
 
@@ -221,6 +258,167 @@ public class MenuDocentesActivity extends AppCompatActivity {
         });
 
         cargarUsuario(idProfesor);
+    }
+
+    private void dialogSubirNoticia(Usuarios usuario) {
+        final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("Subir noticia ... ")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View agregar_noticia = inflater.inflate(R.layout.agregar_noticia, null);
+
+        edtNombreCreador = agregar_noticia.findViewById(R.id.edtNombreCreador);
+        edtNombreCreador.setText(usuario.getNombre());
+        edtNombreCreador.setEnabled(false);
+
+
+
+        btnSelect = agregar_noticia.findViewById(R.id.btnSelect);
+        btnUpload = agregar_noticia.findViewById(R.id.btnUpload);
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+                //CropImage.startPickImageActivity(MenuDocentesActivity.this);
+            }
+        });
+
+        alerta.setView(agregar_noticia);
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                /*if (edtNombreCreador.getText().toString().equals("")) {
+                    Toast.makeText(MenuDocentesActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                } else if (slider_noti != null){
+                    String uid = String.valueOf(System.currentTimeMillis());
+                    db.collection("Slider").document(uid).set(slider_noti);
+                    Toast.makeText(MenuDocentesActivity.this, "Agregada correctamente", Toast.LENGTH_SHORT).show();
+                }*/
+            }
+        });
+
+        alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta.show();
+
+    }
+
+    private void dialogAdministrarNoticias() {
+        final AlertDialog.Builder alertNoticias = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("Noticias y comunicados")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View verNoticias = inflater.inflate(R.layout.datos_en_recycler, null);
+
+        recycler_trabajos = verNoticias.findViewById(R.id.recycler_datos);
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        recycler_trabajos.setLayoutManager(layoutManager);
+
+        Query query = db.collection("Slider");
+        //.orderBy("fecha", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<SliderData> options = new FirestoreRecyclerOptions.Builder<SliderData>()
+                .setQuery(query, SliderData.class)
+                .build();
+
+        adapterNoticias = new FirestoreRecyclerAdapter<SliderData, SliderDataViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull SliderDataViewHolder holder, int i, @NonNull SliderData sliderData) {
+
+                slider_noti = sliderData;
+
+                holder.slider_creador.setText("Subida por:\n" + slider_noti.getCreador());
+
+                Picasso.get().load(slider_noti.getImgUrl()).into(holder.slider_imagen);
+
+                holder.slider_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteNoticia(adapterNoticias.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+
+                        Toast.makeText(MenuDocentesActivity.this, "Eliminar noticia", Toast.LENGTH_SHORT).show();
+                        //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
+                    }
+                });
+
+
+                holder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        Toast.makeText(MenuDocentesActivity.this, "Creado por: " + slider_noti.getCreador(), Toast.LENGTH_SHORT).show();
+                        /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public SliderDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.admin_noticias,parent,false);
+                return new SliderDataViewHolder(view);
+            }
+        };
+
+        recycler_trabajos.setAdapter(adapterNoticias);
+        adapterNoticias.startListening();
+
+        alertNoticias.setView(verNoticias);
+
+        alertNoticias.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                adapterNoticias.stopListening();
+                dialogInterface.cancel();
+
+            }
+        });
+
+        alertNoticias.show();
+    }
+
+    private void deleteNoticia(String id) {
+        AlertDialog.Builder alertBorrarNoticia = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("ELIMINAR NOTICIA")
+                .setMessage("¿Está seguro de eliminar la noticia seleccionada?\nUna vez eliminada no se podrá recuperar")
+                .setCancelable(true);
+        alertBorrarNoticia.setPositiveButton("SI, eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                db.collection("Slider").document(id)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("BORRAR NOTICIA", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("BORRAR NOTICIA", "Error deleting document", e);
+                            }
+                        });
+                Toast.makeText(MenuDocentesActivity.this, "Noticia eliminada", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertBorrarNoticia.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertBorrarNoticia.show();
     }
 
     private void dialogSubirTrabajo(Usuarios usuario) {
@@ -629,8 +827,57 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 }
             });
 
-        } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
+        }/* else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
             subirNoticia(data.getData());
+        }*/
+        if (requestCode == PICK_IMAGE  && resultCode == -1) {
+            CropImage.activity(CropImage.getPickImageResultUri(this, data)).setGuidelines(CropImageView.Guidelines.ON).setRequestedSize(400, 200).setAspectRatio(2, 1).start((Activity) this);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            //Uri resultUri = result.getUri();
+            if (resultCode == -1) {
+                File file = new File(result.getUri().getPath());
+
+                btnUpload.setEnabled(true);
+                btnSelect.setText("IMG selec.");
+                btnSelect.setEnabled(false);
+
+                btnUpload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        subirNoticia(result.getUri());
+                        btnUpload.setEnabled(false);
+                        Log.d("Nombre uri", data.toString());
+
+                    }
+                });
+
+                //subirNoticia(result.getUri());
+
+                //No hay dialog con botones
+                /*btnSelect.setText("IMG SELEC.");
+                btnSelect.setClickable(false);
+                btnSelect.setBackgroundColor(0);*/
+
+                /*try {
+                    //this.thumb_bitmap = new Compressor(this).setMaxWidth(300).setMaxHeight(300).setQuality(90).compressToBitmap(file);
+                    thumb_bitmap = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(100)
+                            .compressToBitmap(file);
+
+                }
+                catch (IOException iOException) {
+                    iOException.printStackTrace();
+                }
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, (OutputStream)byteArrayOutputStream);
+                thumb_byte = byteArrayOutputStream.toByteArray();*/
+            }
         }
 
     }

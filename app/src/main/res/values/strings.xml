@@ -65,8 +65,8 @@
 
     <string-array name="Asignaturas">
         <item>Seleccione</item>
-        <item>Grupo 1</item>
-        <item>Grupo 2</item>
+        <item>Burbuja 1</item>
+        <item>Burbuja 2</item>
         <item>Matemática</item>
         <item>Lengua y Literatura</item>
         <item>Historia</item>

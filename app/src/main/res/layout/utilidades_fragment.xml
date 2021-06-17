@@ -146,7 +146,7 @@
                 android:id="@+id/spinBurbuja"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="#AAAAAA"
                 android:entries="@array/Burbujas" />
 
         </LinearLayout>
@@ -172,7 +172,7 @@
                 android:id="@+id/spinCurso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="#AAAAAA"
                 android:entries="@array/CursosSolos" />
 
         </LinearLayout>
@@ -214,7 +214,7 @@
             android:id="@+id/spinMateria2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="#AAAAAA"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subtitleUsoFrecuentePorMateria"
             android:entries="@array/Materias" />
