@@ -57,7 +57,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -424,11 +427,63 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     subirArchivoPDF(data.getData());
+                    btnUpload.setText("ARC. almac.");
                     btnUpload.setEnabled(false);
                     Log.d("Nombre uri", data.toString());
                 }
             });
-        } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
+        }
+        if (requestCode == PICK_IMAGE  && resultCode == -1) {
+            CropImage.activity(CropImage.getPickImageResultUri(this, data)).setGuidelines(CropImageView.Guidelines.ON).start((Activity) this);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            //Uri resultUri = result.getUri();
+            if (resultCode == -1) {
+                File file = new File(result.getUri().getPath());
+
+                btnUpload.setEnabled(true);
+                btnSelect.setText("IMG selec.");
+                btnSelect.setEnabled(false);
+
+                btnUpload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        subirImagen(result.getUri());
+                        btnUpload.setText("IMG. almac.");
+                        btnUpload.setEnabled(false);
+                        Log.d("Nombre uri", data.toString());
+
+                    }
+                });
+
+                //subirNoticia(result.getUri());
+
+                //No hay dialog con botones
+                /*btnSelect.setText("IMG SELEC.");
+                btnSelect.setClickable(false);
+                btnSelect.setBackgroundColor(0);*/
+
+                /*try {
+                    //this.thumb_bitmap = new Compressor(this).setMaxWidth(300).setMaxHeight(300).setQuality(90).compressToBitmap(file);
+                    thumb_bitmap = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(100)
+                            .compressToBitmap(file);
+
+                }
+                catch (IOException iOException) {
+                    iOException.printStackTrace();
+                }
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, (OutputStream)byteArrayOutputStream);
+                thumb_byte = byteArrayOutputStream.toByteArray();*/
+            }
+        }
+        /*else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
             btnUpload.setEnabled(true);
             btnSelect.setText("IMG. selec.");
             btnSelect.setEnabled(false);
@@ -440,8 +495,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     btnUpload.setEnabled(false);
                 }
             });
-        }
-
+        }*/
 
     }
 

@@ -26,9 +26,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class RadioActivity extends AppCompatActivity implements Playable {
 
-    ImageButton play;
+    CircleImageView play;
     TextView title;
 
     NotificationManager notificationManager;
@@ -106,7 +108,6 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         try {
             player.reset();
             player.setDataSource(STREAM_URL);
-            //player.setDataSource("http://server.laradio.online:25224/live.mp3");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -196,7 +197,7 @@ public class RadioActivity extends AppCompatActivity implements Playable {
 
         CreateNotification.createNotification(RadioActivity.this, tracks.get(position),
                 R.drawable.ic_play, position, tracks.size()-1);
-        play.setImageResource(R.drawable.ic_play);
+        play.setImageResource(R.drawable.play);
         title.setText(tracks.get(position).getTitulo());
         isPlaying = false;
         stopPlaying();

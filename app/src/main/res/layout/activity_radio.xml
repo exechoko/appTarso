@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/radio_background"
+    android:background="@drawable/side_nav_bar"
     tools:context=".RadioActivity">
 
     <RelativeLayout
@@ -38,10 +38,10 @@
             android:src="@drawable/pablodetarso"
             android:layout_centerHorizontal="true"/>
 
-        <ImageButton
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_below="@id/logo"
             android:layout_marginTop="70dp"
             android:enabled="true"
@@ -55,11 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text=""
+            android:text="FM Tarso"
+            android:textColor="#00FFE1"
             android:textStyle="bold"
             android:textSize="25sp"
             android:textAlignment="center"
-            android:textColor="#000000"
             android:layout_below="@id/play"/>
 
         <!--Button

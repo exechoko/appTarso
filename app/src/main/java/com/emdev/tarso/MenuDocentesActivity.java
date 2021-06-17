@@ -821,6 +821,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     subirArchivoPDF(data.getData());
+                    btnUpload.setText("ARC. almac.");
                     btnUpload.setEnabled(false);
                     Log.d("Nombre uri", data.toString());
 
@@ -848,7 +849,9 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         subirNoticia(result.getUri());
+                        btnUpload.setText("IMG. almac.");
                         btnUpload.setEnabled(false);
+
                         Log.d("Nombre uri", data.toString());
 
                     }
