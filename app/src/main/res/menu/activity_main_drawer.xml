@@ -8,6 +8,7 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
+
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_baseline_school_24"
@@ -17,7 +18,6 @@
             android:icon="@drawable/ic_work"
             android:title="@string/menu_slideshow" />
 
-
     </group>
 
     <group
@@ -26,8 +26,19 @@
 
         <item
             android:id="@+id/nav_utilidades"
-            android:icon="@drawable/ic_herramienta"
+            android:icon="@drawable/ic_baseline_attach_file_24"
             android:title="@string/menu_utilidades" />
+        <item
+            android:id="@+id/nav_preincripcion"
+            android:icon="@drawable/ic_baseline_edit_24"
+            android:title="@string/menu_preinscripcion" />
+
+    </group>
+
+    <group
+        android:id="@+id/grupo2"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/radioActivity"
             android:icon="@drawable/ic_radio"

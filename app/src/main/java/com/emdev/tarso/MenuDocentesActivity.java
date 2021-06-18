@@ -49,12 +49,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -258,6 +261,45 @@ public class MenuDocentesActivity extends AppCompatActivity {
         });
 
         cargarUsuario(idProfesor);
+
+        txtNombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarNombre(usuario);
+            }
+        });
+    }
+
+    private void cambiarNombre(Usuarios usuario) {
+        final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("Cambiar nombre de usuario")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View cambiar_nombre = inflater.inflate(R.layout.cambiar_nombre, null);
+        EditText nombre = cambiar_nombre.findViewById(R.id.edtNombreUsuario);
+        nombre.setText(usuario.getNombre());
+        alerta.setView(cambiar_nombre);
+
+        alerta.setPositiveButton("CAMBIAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                usuario.setNombre(nombre.getText().toString());
+                //actualiza el nombre en Firestore
+                db.collection("Usuarios").document(usuario.getId()).set(usuario);
+                txtNombre.setText("Bienvenid@ Profe\n" + usuario.getNombre());
+
+            }
+        });
+        alerta.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta.show();
+
     }
 
     private void dialogSubirNoticia(Usuarios usuario) {
@@ -424,6 +466,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     private void dialogSubirTrabajo(Usuarios usuario) {
         final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuDocentesActivity.this)
                 .setTitle("Subir trabajo ... ")
+                .setMessage("Asegúrese que el archivo\nsea en formato PDF para que sea\ncorrecta su lectura.")
                 .setCancelable(false);
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -571,7 +614,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     }
                 });
 
-
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
@@ -623,6 +665,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         Query query = db.collection("Documentos")
                 .whereEqualTo("curso", c)
                 .whereEqualTo("materia", a)
+                .whereEqualTo("creadorIsProfesor","NO")
                 .whereNotEqualTo("id", idProfesor);
         //.orderBy("fecha", Query.Direction.DESCENDING);
 
@@ -735,7 +778,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
         //request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre() + extension);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"DescargasPabloDeTarso/" + doc.getNombre() + extension);
 
         //Obtener el servicio
         DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);

@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ECECEC"
     app:cardElevation="4dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ECECEC">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/edtNombreCreador"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Apellido y Nombre"
-            android:text=""
-            android:textSize="18sp"
-            android:inputType="textMultiLine"/>
+            android:hint="Apellido y Nombre">
 
-        <EditText
-            android:id="@+id/edtNombreTrabajo"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtNombreCreador"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:inputType="text"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del trabajo"
-            android:text=""
-            android:textSize="18sp"
-            android:inputType="textMultiLine"/>
+            android:hint="Nombre del trabajo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtNombreTrabajo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:inputType="text"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Asignatura:"
-            android:textColor="@color/black"
+            android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"/>
         <Spinner
@@ -64,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Curso:"
-                android:textColor="@color/black"
+                android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -118,4 +130,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

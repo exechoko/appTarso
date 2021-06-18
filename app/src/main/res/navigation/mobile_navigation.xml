@@ -39,4 +39,9 @@
         android:name="com.emdev.tarso.RadioActivity"
         android:label="activity_radio"
         tools:layout="@layout/activity_radio" />
+    <fragment
+        android:id="@+id/nav_preincripcion"
+        android:name="com.emdev.tarso.ui.preinscripcion.preincripcion"
+        android:label="@string/menu_preinscripcion"
+        tools:layout="@layout/preincripcion_fragment" />
 </navigation>

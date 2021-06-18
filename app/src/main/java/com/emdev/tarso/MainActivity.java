@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                         "Consulta de App Pablo de Tarso"); // Email 's Subject
                 Email.putExtra(Intent.EXTRA_TEXT, "Buenos días," + "");  //Email 's Greeting text
                 startActivity(Intent.createChooser(Email, "Send Feedback:"));
-                Snackbar.make(view, "Enviar correo", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Enviar un correo", Snackbar.LENGTH_LONG)
                         .setAction("Correo", null).show();
             }
         });
@@ -50,52 +50,15 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_utilidades, R.id.radioActivity)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_utilidades, R.id.radioActivity, R.id.nav_preincripcion)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        
-        //crearCarpeta();
+
     }
 
-    /*private void crearCarpeta() {
-        //crear carpeta en la raíz del almacenamiento interno
-        File ruta_sd = Environment.getExternalStorageDirectory();
-        File carpeta = new File(ruta_sd.getAbsolutePath(), "miCarpeta");
-
-        //comprobar si la carpeta no existe, entonces crearla
-        if(!carpeta.exists()) {
-            carpeta.mkdirs(); // creará la carpeta en la ruta indicada al inicializar el objeto File
-            if(carpeta.mkdirs())
-                Toast.makeText(getApplicationContext(), "Carpeta creada : " + carpeta.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            //se ha creado la carpeta;
-        }else
-        {
-            //la carpeta ya existe
-            Toast.makeText(getApplicationContext(), "Carpeta existente : " + carpeta.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        }
-
-        Log.d("carpeta creada", carpeta.getAbsolutePath());
-
-        //crear un archivo de texto en la carpeta creada
-        try
-        {
-            File archivotxt = new File(carpeta, "miTexto.txt");
-            FileWriter writer = new FileWriter(archivotxt);
-            writer.append("Este es el contenido de mi archivo de texto.");
-            writer.flush();
-            writer.close();
-            Toast.makeText(this, "Archivo guardado", Toast.LENGTH_SHORT).show();
-        }
-        catch(IOException e)
-        {
-            //mostrar en el Logcat el error
-            Log.d("Error al crear archivo",e.getStackTrace().toString());
-        }
-
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -698,7 +698,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
         //request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + doc.getNombre() + extension);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"DescargasPabloDeTarso/" + doc.getMateria() +"/" + doc.getNombre() + "_" + doc.getCreador()+ extension);
 
         //Obtener el servicio
         DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);

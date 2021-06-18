@@ -37,6 +37,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_toRightOf="@id/fotoPerfilDocente"
                 android:text="Bienvenid@ usuario"
+                android:clickable="true"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:textStyle="bold" />
