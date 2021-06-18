@@ -5,6 +5,7 @@
     <item
         android:id="@+id/item_noticias"
         android:title="Noticias/Comun."
+        android:icon="@drawable/ic_newspaper"
         app:showAsAction="always" />
 
     <!--item
