@@ -8,11 +8,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,7 +38,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RadioActivity extends AppCompatActivity implements Playable {
 
     CircleImageView play;
+    Button abrirNavegador;
     TextView title;
+    WebView w;
 
     NotificationManager notificationManager;
 
@@ -50,6 +59,37 @@ public class RadioActivity extends AppCompatActivity implements Playable {
 
         play = findViewById(R.id.play);
         title = findViewById(R.id.title);
+        player = new MediaPlayer();
+        abrirNavegador = findViewById(R.id.abrirEnElNavegador);
+
+        //webAudio();
+        /*w = findViewById(R.id.web);
+        w.getSettings().setJavaScriptEnabled(true);
+        w.getSettings().setAllowContentAccess(true);
+        w.getSettings().setDomStorageEnabled(true);
+        w.setWebViewClient(new WebViewClient());
+        if (Build.VERSION.SDK_INT >= 19) {
+            w.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            w.getSettings().setMediaPlaybackRequiresUserGesture(false);
+            w.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        w.loadUrl("https://zeno.fm/fmTarso/");*/
+
+
+
+
+        /*webLinkRadio.getSettings().setJavaScriptEnabled(true);
+        webLinkRadio.getSettings().setAllowContentAccess(true);
+        webLinkRadio.getSettings().setDomStorageEnabled(true);
+        webLinkRadio.setWebViewClient(new WebViewClient());
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            webLinkRadio.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            webLinkRadio.getSettings().setMediaPlaybackRequiresUserGesture(false);
+            webLinkRadio.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
+        webLinkRadio.loadUrl("https://zeno.fm/fmTarso/");*/
 
         popluateTracks();
 
@@ -70,8 +110,82 @@ public class RadioActivity extends AppCompatActivity implements Playable {
             }
         });
 
+        abrirNavegador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri link = Uri.parse("https://zeno.fm/fmTarso/");
+                Intent i = new Intent(Intent.ACTION_VIEW, link);
+                startActivity(i);
+            }
+        });
+
         initializeMediaPlayer();
     }
+
+    /*private void webAudio() {
+        w=findViewById(R.id.web);
+
+        String about=
+                "<html>\n"+
+                        "<body>\n" +
+                        "\t<h6>PLAY</h6>\n" +
+                        "\t<br>\n" +
+                        "<audio " +
+                        "class=\"audio\" style=\"width: 100%;display: block;height: auto !important;padding-bottom:0;\""+
+                "controls=\"\" autoplay=\"\" name=\"media\">" +
+                "<source src=\"http://node-11.zeno.fm:80/cc0tgb10yv8uv.mp3\" " +
+                "type=\"audio/mpeg\">" +
+                "</audio>" +
+                "</body>" +
+                "</html>";
+
+        TypedArray ta = obtainStyledAttributes(new int[]{android.R.attr.textColorPrimary, R.attr.colorAccent});
+        String textColor = String.format("#%06X", (0xFFFFFF & ta.getColor(1, Color.WHITE)));
+        String accentColor = String.format("#%06X", (0xFFFFFF & ta.getColor(9, Color.BLUE)));
+        ta.recycle();
+        about = "<style media=\"screen\" type=\"text/css\">" +
+                "body {\n" +
+                "    color:" + textColor + ";\n" +
+                "}\n" +
+                "a:link {color:" + accentColor + "}\n" +
+                "</style>" + about;
+        w.setBackgroundColor(Color.BLACK);
+
+        w.getSettings().setJavaScriptEnabled(true);
+
+        w.setWebViewClient(new MyWebViewClient() {
+            @Override
+
+            public boolean shouldOverrideUrlLoading(WebView view, String Url) {
+                return super.shouldOverrideUrlLoading(view, Url);            }
+        });        w.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+
+        w.getSettings().setAppCacheEnabled(true);
+
+        w.getSettings().setDomStorageEnabled(true);
+
+        w.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+
+        w.getSettings().setUseWideViewPort(true);
+
+        w.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        w.getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+        w.setFocusable(true);
+
+        w.setScrollBarStyle(w.SCROLLBARS_OUTSIDE_OVERLAY);
+
+        w.getSettings().getLoadWithOverviewMode();
+
+        w.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        w.getSettings().setDisplayZoomControls(true);
+
+        w.getSettings().setDatabaseEnabled(true);
+
+        w.loadData(about, "text/html", "UTF-8");
+    }*/
 
     private void startPlaying() {
         /*buttonStopPlay.setEnabled(true);
@@ -84,6 +198,7 @@ public class RadioActivity extends AppCompatActivity implements Playable {
 
             @Override
             public void onPrepared(MediaPlayer mp) {
+                //player.start();
                 mp.start(); //antes player.start()
             }
         });
@@ -104,10 +219,10 @@ public class RadioActivity extends AppCompatActivity implements Playable {
     }
 
     private void initializeMediaPlayer() {
-        player = new MediaPlayer();
         try {
             player.reset();
             player.setDataSource(STREAM_URL);
+            //player.prepare();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {

@@ -26,33 +26,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <EditText
-            android:id="@+id/edtCorreo"
-            android:layout_width="300dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:ems="10"
-            android:hint="CORREO"
-            android:inputType="textEmailAddress"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titulo" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="Correo"
+            android:textColorHint="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#8AA60000"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text=""
+                android:inputType="textEmailAddress"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnRestaurar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="#A8048319"
             android:text="ENVIAR "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtCorreo" />
+            app:layout_constraintTop_toBottomOf="@id/textField" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
