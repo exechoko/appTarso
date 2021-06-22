@@ -66,7 +66,7 @@ import java.util.Date;
 
 public class MenuEstudiantesActivity extends AppCompatActivity {
 
-    private static final int PERMISO_ALMACENAMIENTO = 1000;
+    private static final int PERMISO_ALMACENAMIENTO2 = 1001;
     private static final int PICK_IMAGE = 100;
     boolean permisos_ok = false;
 
@@ -79,7 +79,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
     Usuarios usuario;
     TextView txtNombre;
-    Documentos doc;
+    //Documentos doc;
 
     RecyclerView recycler_trabajos;
     LinearLayoutManager layoutManager;
@@ -597,7 +597,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                doc = documentos;
+                //doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
                 holder.doc_materia.setText(documentos.getMateria());
@@ -606,9 +606,9 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_concepto.setText(documentos.getConcepto());
                 holder.doc_creador.setText(documentos.getCreador());
 
-                if (doc.getUrl().contains(".pdf")){
+                if (documentos.getUrl().contains(".pdf")){
                     Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
-                } else if (doc.getUrl().contains(".jpg")){
+                } else if (documentos.getUrl().contains(".jpg")){
                     Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
                 }
 
@@ -629,15 +629,15 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                                 //Denegado, solicitarlo
                                 String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
                                 //Dialogo emergente
-                                requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
+                                requestPermissions(permisos,PERMISO_ALMACENAMIENTO2);
 
                             } else {
                                 Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                                downloadFile(doc);
+                                downloadFile(documentos);
                             }
                         } else {
                             Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                            downloadFile(doc);
+                            downloadFile(documentos);
                         }
 
                         //Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
@@ -649,7 +649,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(MenuEstudiantesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuEstudiantesActivity.this, "Creado por: " + documentos.getCreador(), Toast.LENGTH_SHORT).show();
                         /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
                     }
                 });
@@ -708,10 +708,11 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
-            case PERMISO_ALMACENAMIENTO:{
+            case PERMISO_ALMACENAMIENTO2:{
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //Permiso otorgado
                     //permisos_ok = true;
+                    Documentos doc = null;
                     downloadFile(doc);
                 } else {
                     Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();
@@ -825,7 +826,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                doc = documentos;
+                //doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
                 holder.doc_creador.setText(documentos.getCreador());
@@ -834,9 +835,9 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_nota.setText(documentos.getNota());
                 holder.doc_concepto.setText(documentos.getConcepto());
 
-                if (doc.getUrl().contains(".pdf")){
+                if (documentos.getUrl().contains(".pdf")){
                     Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
-                } else if (doc.getUrl().contains(".jpg")){
+                } else if (documentos.getUrl().contains(".jpg")){
                     Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
                 }
 
@@ -852,7 +853,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        downloadFile(doc);
+                        downloadFile(documentos);
                         Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                         //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
                     }
@@ -862,7 +863,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(MenuEstudiantesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuEstudiantesActivity.this, "Creado por: " + documentos.getCreador(), Toast.LENGTH_SHORT).show();
                         /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
                     }
                 });

@@ -95,7 +95,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     RecyclerView recycler_trabajos;
     LinearLayoutManager layoutManager;
     FirestoreRecyclerAdapter<Documentos, DocumentosViewHolder> adapter;
-    Documentos doc;
+    //Documentos doc;
     String subPath = "DescargasPabloDeTarso/";
 
     //Para subir un trabajo
@@ -583,7 +583,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                doc = documentos;
+                //doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
                 holder.doc_creador.setText(documentos.getCreador());
@@ -592,9 +592,9 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_nota.setText(documentos.getNota());
                 holder.doc_concepto.setText(documentos.getConcepto());
 
-                if (doc.getUrl().contains(".pdf")){
+                if (documentos.getUrl().contains(".pdf")){
                     Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
-                } else if (doc.getUrl().contains(".jpg")){
+                } else if (documentos.getUrl().contains(".jpg")){
                     Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
                 }
 
@@ -604,7 +604,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                         Toast.makeText(MenuDocentesActivity.this, "Compartir", Toast.LENGTH_SHORT).show();
 
                         File outputFile = new File(Environment.getExternalStoragePublicDirectory
-                                (Environment.DIRECTORY_DOWNLOADS), subPath + doc.getNombre() + ".pdf");
+                                (Environment.DIRECTORY_DOWNLOADS), subPath + documentos.getNombre() + ".pdf");
                         Uri uri = Uri.fromFile(outputFile);
 
                         /*File outputFile = new File(Environment.getExternalStoragePublicDirectory
@@ -612,7 +612,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                         //Log.d("OUTFILE", outputFile.getAbsolutePath());
                         if (!outputFile.exists()){
                             Toast.makeText(MenuDocentesActivity.this, "No existe el archivo", Toast.LENGTH_SHORT).show();
-                            downloadFile(doc);
+                            downloadFile(documentos);
                         }
                         //Uri uri = Uri.parse(outputFile);
 
@@ -635,7 +635,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        downloadFile(doc);
+                        downloadFile(documentos);
                         Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                         //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
                     }
@@ -644,7 +644,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(MenuDocentesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuDocentesActivity.this, "Creado por: " + documentos.getCreador(), Toast.LENGTH_SHORT).show();
                         /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
                     }
                 });
@@ -703,7 +703,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull DocumentosViewHolder holder, int i, @NonNull Documentos documentos) {
 
-                doc = documentos;
+                //doc = documentos;
 
                 holder.doc_nombre.setText(documentos.getNombre());
                 holder.doc_nota.setText(documentos.getNota());
@@ -712,9 +712,9 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_concepto.setText(documentos.getConcepto());
                 holder.doc_creador.setText(documentos.getCreador());
 
-                if (doc.getUrl().contains(".pdf")){
+                if (documentos.getUrl().contains(".pdf")){
                     Picasso.get().load(R.drawable.icon_pdf).into(holder.doc_imagen);
-                } else if (doc.getUrl().contains(".jpg")){
+                } else if (documentos.getUrl().contains(".jpg")){
                     Picasso.get().load(R.drawable.icon_imagen).into(holder.doc_imagen);
                 }
 
@@ -739,11 +739,11 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                                downloadFile(doc);
+                                downloadFile(documentos);
                             }
                         } else {
                             Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                            downloadFile(doc);
+                            downloadFile(documentos);
                         }
 
                     }
@@ -754,7 +754,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     public void onClick(View view, int position, boolean isLongClick) {
                         //Toast.makeText(MenuDocentesActivity.this, "Creado por: " + doc.getCreador(), Toast.LENGTH_SHORT).show();
                         Log.d("KeyDocumento", adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
-                        agregarNota(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId(), doc);
+                        agregarNota(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId(), documentos);
                     }
                 });
 
@@ -822,6 +822,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //Permiso otorgado
                     //permisos_ok = true;
+                    Documentos doc = null;
                     downloadFile(doc);
                 } else {
                     Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();

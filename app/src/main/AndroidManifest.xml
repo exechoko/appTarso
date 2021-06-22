@@ -5,8 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
@@ -21,9 +20,12 @@
         <activity android:name=".RadioActivity"
             android:parentActivityName=".MainActivity"
             android:hardwareAccelerated="true"></activity>
-        <activity android:name=".RegistroProfActivity" />
-        <activity android:name=".ResetPaswordActivity" />
-        <activity android:name=".RegistroEstActivity" />
+        <activity android:name=".RegistroProfActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ResetPaswordActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".RegistroEstActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".NoticiasActivity"
             android:parentActivityName=".MainActivity" />
