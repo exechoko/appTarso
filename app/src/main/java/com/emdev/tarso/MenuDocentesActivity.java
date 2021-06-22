@@ -96,6 +96,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     FirestoreRecyclerAdapter<Documentos, DocumentosViewHolder> adapter;
     Documentos doc;
+    String subPath = "DescargasPabloDeTarso/";
 
     //Para subir un trabajo
     EditText edtNombreCreador, edtNombreTrabajo, edtNota, edtConcepto;
@@ -601,6 +602,32 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(MenuDocentesActivity.this, "Compartir", Toast.LENGTH_SHORT).show();
+
+                        File outputFile = new File(Environment.getExternalStoragePublicDirectory
+                                (Environment.DIRECTORY_DOWNLOADS), subPath + doc.getNombre() + ".pdf");
+                        Uri uri = Uri.fromFile(outputFile);
+
+                        /*File outputFile = new File(Environment.getExternalStoragePublicDirectory
+                                (Environment.DIRECTORY_DOWNLOADS), doc.getNombre() + ".pdf");*/
+                        //Log.d("OUTFILE", outputFile.getAbsolutePath());
+                        if (!outputFile.exists()){
+                            Toast.makeText(MenuDocentesActivity.this, "No existe el archivo", Toast.LENGTH_SHORT).show();
+                            downloadFile(doc);
+                        }
+                        //Uri uri = Uri.parse(outputFile);
+
+                        try {
+                            //Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/" + subPath + doc.getNombre() + ".pdf");
+                            Intent share = new Intent();
+                            share.setAction(Intent.ACTION_SEND);
+                            share.setType("text/plain");
+                            share.putExtra(Intent.EXTRA_STREAM, uri);
+                            share.setPackage("com.whatsapp");
+                            startActivity(share);
+                        } catch (android.content.ActivityNotFoundException ex){
+                            Toast.makeText(MenuDocentesActivity.this, "WhatsApp no está instalado", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 
@@ -636,7 +663,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
         adapter.startListening();
 
         alert.setView(misTrabajos);
-
 
         alert.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
             @Override
@@ -764,25 +790,29 @@ public class MenuDocentesActivity extends AppCompatActivity {
     private void downloadFile(Documentos doc) {
 
         String extension = "";
+
         if (doc.getUrl().contentEquals(".pdf")){
             extension = ".pdf";
         } else if (doc.getUrl().contentEquals(".jpg")){
             extension = ".jpg";
         }
 
+        //subPath = "DescargasPabloDeTarso/";
+
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(doc.getUrl()));
         //Tipo de red
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle(doc.getNombre());
+        request.setTitle(doc.getNombre() + extension);
         request.setDescription("Descargando archivo ... ");
 
         //request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"DescargasPabloDeTarso/" + doc.getNombre() + extension);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, subPath + doc.getNombre() + extension);
 
         //Obtener el servicio
         DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
+
     }
 
     @Override
@@ -933,6 +963,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         progressDialog.setTitle("Subir noticia/comunicado");
         progressDialog.show();
 
+        //Ruta en el Storage
         StorageReference reference = storageReferenceNews.child(System.currentTimeMillis() + ".jpg");
         reference.putFile(data)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -964,6 +995,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         progressDialog.setTitle("Subir archivo");
         progressDialog.show();
 
+        //Ruta en el Storage
         StorageReference reference = storageReference.child(mat +"/" + edtNombreTrabajo.getText().toString() + ".pdf");
 
         reference.putFile(data)
