@@ -603,21 +603,17 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Toast.makeText(MenuDocentesActivity.this, "Compartir", Toast.LENGTH_SHORT).show();
 
-                        File outputFile = new File(Environment.getExternalStoragePublicDirectory
+                        /*File outputFile = new File(Environment.getExternalStoragePublicDirectory
                                 (Environment.DIRECTORY_DOWNLOADS), subPath + documentos.getNombre() + ".pdf");
                         Uri uri = Uri.fromFile(outputFile);
 
-                        /*File outputFile = new File(Environment.getExternalStoragePublicDirectory
-                                (Environment.DIRECTORY_DOWNLOADS), doc.getNombre() + ".pdf");*/
-                        //Log.d("OUTFILE", outputFile.getAbsolutePath());
                         if (!outputFile.exists()){
                             Toast.makeText(MenuDocentesActivity.this, "No existe el archivo", Toast.LENGTH_SHORT).show();
                             downloadFile(documentos);
                         }
-                        //Uri uri = Uri.parse(outputFile);
 
                         try {
-                            //Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/" + subPath + doc.getNombre() + ".pdf");
+
                             Intent share = new Intent();
                             share.setAction(Intent.ACTION_SEND);
                             share.setType("text/plain");
@@ -626,7 +622,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                             startActivity(share);
                         } catch (android.content.ActivityNotFoundException ex){
                             Toast.makeText(MenuDocentesActivity.this, "WhatsApp no está instalado", Toast.LENGTH_SHORT).show();
-                        }
+                        }*/
 
                     }
                 });
