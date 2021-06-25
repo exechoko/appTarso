@@ -99,6 +99,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_estudiantes);
+        MenuEstudiantesActivity.this.setTitle("Sección Est.");
 
         txtNombre = findViewById(R.id.nombreEstudiante);
         btnVerTrabajos = findViewById(R.id.btnTrabajos);
