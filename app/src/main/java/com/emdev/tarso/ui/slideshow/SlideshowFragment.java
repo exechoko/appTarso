@@ -72,18 +72,11 @@ public class SlideshowFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                comprobarProfesor(emailProf.getText().toString());
-
                 mDialog.setMessage("Iniciando sesión...");
                 mDialog.setCanceledOnTouchOutside(false);
                 mDialog.show();
 
-                if (emailProf.getText().toString().equals("")|| passProf.getText().toString().equals("")){
-                    mDialog.dismiss();
-                    Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
-                } else {
-                    iniciarSesion(emailProf.getText().toString(), passProf.getText().toString());
-                }
+                comprobarProfesor_IniciarSesion(emailProf.getText().toString(), passProf.getText().toString());
 
             }
         });
@@ -133,26 +126,35 @@ public class SlideshowFragment extends Fragment {
                 });
     }
 
-    private void comprobarProfesor(String e) {
-        db.collection("Usuarios")
-                .whereEqualTo("correo", e)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                user = document.toObject(Usuarios.class);
-                                esProfesor = user.getIsProfesor();
-                                Log.d(TAG, esProfesor);
+    private void comprobarProfesor_IniciarSesion(String e, String p) {
+        if (e.equals("")|| p.equals("")){
+            mDialog.dismiss();
+            Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
+        } else {
+            db.collection("Usuarios")
+                    .whereEqualTo("correo", e)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    user = document.toObject(Usuarios.class);
+                                    esProfesor = user.getIsProfesor();
+                                    Log.d(TAG, esProfesor);
 
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                    iniciarSesion(e, p);
+
+                                    //Log.d(TAG, document.getId() + " => " + document.getData());
+                                }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
                             }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                    }
-                });
+                    });
+        }
+
+
     }
 /*
     @Override
