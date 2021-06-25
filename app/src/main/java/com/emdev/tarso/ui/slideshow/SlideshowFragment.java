@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.emdev.tarso.MenuDocentesActivity;
 import com.emdev.tarso.R;
 import com.emdev.tarso.RegistroEstActivity;
@@ -40,7 +41,8 @@ public class SlideshowFragment extends Fragment {
     String esProfesor = "";
     private FirebaseAuth mAuth;
 
-    ProgressDialog mDialog;
+    //ProgressDialog mDialog;
+    private LottieAnimationView mAnimation;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class SlideshowFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
 
-        mDialog = new ProgressDialog(getContext());
+        mAnimation = root.findViewById(R.id.animation);
+        //mDialog = new ProgressDialog(getContext());
 
         EditText emailProf, passProf;
         Button btnIngresarProf, btnRegistrarProf;
@@ -72,9 +75,12 @@ public class SlideshowFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                mDialog.setMessage("Iniciando sesión...");
+                mAnimation.playAnimation();
+                mAnimation.setVisibility(View.VISIBLE);
+
+                /*mDialog.setMessage("Iniciando sesión...");
                 mDialog.setCanceledOnTouchOutside(false);
-                mDialog.show();
+                mDialog.show();*/
 
                 comprobarProfesor_IniciarSesion(emailProf.getText().toString(), passProf.getText().toString());
 
@@ -121,14 +127,18 @@ public class SlideshowFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Profesor", Toast.LENGTH_SHORT).show();
                         }
-                        mDialog.dismiss();
+                        //mDialog.dismiss();
+                        mAnimation.cancelAnimation();
+                        mAnimation.setVisibility(View.GONE);
                     }
                 });
     }
 
     private void comprobarProfesor_IniciarSesion(String e, String p) {
         if (e.equals("")|| p.equals("")){
-            mDialog.dismiss();
+            //mDialog.dismiss();
+            mAnimation.cancelAnimation();
+            mAnimation.setVisibility(View.GONE);
             Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
         } else {
             db.collection("Usuarios")

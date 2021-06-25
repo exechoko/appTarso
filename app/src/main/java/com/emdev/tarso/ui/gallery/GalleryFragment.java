@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.emdev.tarso.MenuEstudiantesActivity;
 import com.emdev.tarso.R;
 import com.emdev.tarso.RegistroEstActivity;
@@ -39,7 +40,8 @@ public class GalleryFragment extends Fragment {
 
     String esProfesor = "";
 
-    ProgressDialog mDialog;
+    //ProgressDialog mDialog;
+    private LottieAnimationView mAnimation;
 
     private FirebaseAuth mAuth;
     /*FirebaseDatabase database;
@@ -55,8 +57,10 @@ public class GalleryFragment extends Fragment {
         Button btnIngresar, btnRegistrarEst;
         TextView olvideClaveEst;
 
+        mAnimation = root.findViewById(R.id.animation);
 
-        mDialog = new ProgressDialog(getContext());
+
+        //mDialog = new ProgressDialog(getContext());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -71,9 +75,12 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                mDialog.setMessage("Iniciando sesión...");
+                mAnimation.playAnimation();
+                mAnimation.setVisibility(View.VISIBLE);
+
+                /*mDialog.setMessage("Iniciando sesión...");
                 mDialog.setCanceledOnTouchOutside(false);
-                mDialog.show();
+                mDialog.show();*/
 
                 comprobarProfesor_IniciarSesion(email.getText().toString(), pass.getText().toString());
 
@@ -123,7 +130,9 @@ public class GalleryFragment extends Fragment {
                             Log.d(TAG, "Es profesor");
                             Toast.makeText(getActivity(), "Fallo el ingreso porque necesita una cuenta Estudiante", Toast.LENGTH_SHORT).show();
                         }
-                        mDialog.dismiss();
+                        //mDialog.dismiss();
+                        mAnimation.cancelAnimation();
+                        mAnimation.setVisibility(View.GONE);
 
 
                     }
@@ -132,7 +141,10 @@ public class GalleryFragment extends Fragment {
 
     private void comprobarProfesor_IniciarSesion(String e, String p) {
         if (e.equals("") ||p.equals("")){
-            mDialog.dismiss();
+            //mDialog.dismiss();
+            mAnimation.cancelAnimation();
+            mAnimation.setVisibility(View.GONE);
+
             Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
         } else {
             db.collection("Usuarios")

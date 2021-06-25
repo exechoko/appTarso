@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    implementation 'com.airbnb.android:lottie:3.4.0'
+
     implementation 'androidx.media:media:1.1.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'

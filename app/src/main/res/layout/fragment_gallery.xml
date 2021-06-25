@@ -16,26 +16,25 @@
             android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:hint="Correo"
-            android:textColorHint="@color/white">
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#8AA60000"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:text=""
                 android:inputType="textEmailAddress"
-                />
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,64 +42,28 @@
             android:id="@+id/textField1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textField"
             android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
             android:hint="Contraseña"
             android:textColorHint="@color/white"
-            app:endIconMode="password_toggle">
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textField">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#8AA60000"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:text=""
                 android:inputType="numberPassword"
-                />
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <!--EditText
-            android:id="@+id/edtEmail"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:ems="10"
-            android:hint="Correo"
-            android:inputType="textEmailAddress"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/edtPass"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Contraseña"
-            android:inputType="numberPassword"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtEmail" /-->
 
         <Button
             android:id="@+id/btnIngresar"
@@ -117,8 +80,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Olvidé mi clave"
             android:clickable="true"
+            android:text="Olvidé mi clave"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/btnIngresar"
@@ -135,7 +98,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnIngresar" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:elevation="10dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="28893-book-loading.json"
+            app:lottie_imageAssetsFolder="assets"
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </ScrollView>
