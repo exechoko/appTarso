@@ -28,6 +28,12 @@
             android:id="@+id/nav_utilidades"
             android:icon="@drawable/ic_baseline_attach_file_24"
             android:title="@string/menu_utilidades" />
+
+        <item
+            android:id="@+id/nav_biblioteca"
+            android:icon="@drawable/ic_book"
+            android:title="@string/menu_biblioteca" />
+
         <item
             android:id="@+id/nav_preincripcion"
             android:icon="@drawable/ic_baseline_edit_24"

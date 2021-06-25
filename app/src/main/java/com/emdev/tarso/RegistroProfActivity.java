@@ -32,6 +32,7 @@ public class RegistroProfActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_prof);
+        RegistroProfActivity.this.setTitle("Reg. Profesores");
 
         edtNombreProf = findViewById(R.id.edtNombreProf);
         edtDniProf = findViewById(R.id.edtDniProf);

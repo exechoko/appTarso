@@ -56,6 +56,7 @@ public class RadioActivity extends AppCompatActivity implements Playable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio);
+        RadioActivity.this.setTitle("FM Tarso");
 
         play = findViewById(R.id.play);
         title = findViewById(R.id.title);

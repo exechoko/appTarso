@@ -31,6 +31,7 @@ public class RegistroEstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_est);
+        RegistroEstActivity.this.setTitle("Reg. Estudiantes");
 
         edtNombre = findViewById(R.id.edtNombreEst);
         edtDni = findViewById(R.id.edtDniEst);

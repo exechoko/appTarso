@@ -71,6 +71,9 @@ public class SlideshowFragment extends Fragment {
         btnIngresarProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                comprobarProfesor(emailProf.getText().toString());
+
                 mDialog.setMessage("Iniciando sesión...");
                 mDialog.setCanceledOnTouchOutside(false);
                 mDialog.show();
@@ -79,8 +82,6 @@ public class SlideshowFragment extends Fragment {
                     mDialog.dismiss();
                     Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    comprobarProfesor(emailProf.getText().toString());
                     iniciarSesion(emailProf.getText().toString(), passProf.getText().toString());
                 }
 

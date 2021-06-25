@@ -1,8 +1,11 @@
 package com.emdev.tarso.ui.utilidades;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,8 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +49,11 @@ public class UtilidadesFragment extends Fragment {
     String C=""; //Curso
     String B=""; //Burbuja
     String MS=""; //Materia sola
+
+    ConstraintLayout constraintLayout;
+    String pass = "";
+    Button NO, OK;
+    EditText edtPass_apuntes;
 
 
     public static UtilidadesFragment newInstance() {
@@ -113,6 +124,10 @@ public class UtilidadesFragment extends Fragment {
 //
 //            }
 //        });
+
+        constraintLayout = root.findViewById(R.id.contraint);
+
+        dialogDeAcceso();
 
         btnBuscar = root.findViewById(R.id.verTrabajos);
         btnVerBio = root.findViewById(R.id.verBio);
@@ -213,6 +228,46 @@ public class UtilidadesFragment extends Fragment {
         return root;
     }
 
+    private void dialogDeAcceso() {
+        Dialog alerta = new Dialog(getActivity());
+        alerta.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        assert alerta.getWindow() != null;
+        alerta.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alerta.setTitle("INGRESE LA CLAVE PARA CONTINUAR");
+        alerta.setCancelable(false);
+        alerta.setContentView(R.layout.pass_apuntes);
+
+        edtPass_apuntes = alerta.findViewById(R.id.edtPassApuntes);
+        NO = alerta.findViewById(R.id.btnNo);
+        OK = alerta.findViewById(R.id.btnOk);
+
+        NO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alerta.dismiss();
+            }
+        });
+
+        OK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pass = edtPass_apuntes.getText().toString();
+
+                if (pass.equals("")){
+                    Toast.makeText(getContext(), "Ingrese una contraseña", Toast.LENGTH_SHORT).show();
+                } else if (!pass.equals("852654")){
+                    Toast.makeText(getContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                } else {
+                    alerta.dismiss();
+                    constraintLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        alerta.show();
+
+    }
+
     private void cargarVisualizarDeProyectos() {
         Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -247,7 +302,6 @@ public class UtilidadesFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-
 
         dialog.show();
     }
@@ -316,7 +370,7 @@ public class UtilidadesFragment extends Fragment {
                 nombreApunte = "Sin Contenido";
                 break;
             case "Físicoquímica":
-                nombreApunte = "Sin Contenido";
+                nombreApunte = "Fisico - Quimica - Uso frecuente.pdf";
                 break;
             case "Biología":
                 nombreApunte = "Sin Contenido";

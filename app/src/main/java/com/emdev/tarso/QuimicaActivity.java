@@ -15,7 +15,7 @@ public class QuimicaActivity extends AppCompatActivity {
 
         PDFView pdfVisor = findViewById(R.id.pdfView);
 
-        pdfVisor.fromAsset("tabla_periodica.pdf")
+        pdfVisor.fromAsset("Fisico - Quimica - Uso frecuente.pdf")
                 //.pages() // all pages are displayed by default
                 .enableSwipe(true) // allows to block changing pages using swipe
                 .swipeHorizontal(true)

@@ -31,6 +31,7 @@ public class NoticiasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias);
+        NoticiasActivity.this.setTitle("Noticias");
 
         //Sliders para noticias
         // creating a new array list fr our array list.

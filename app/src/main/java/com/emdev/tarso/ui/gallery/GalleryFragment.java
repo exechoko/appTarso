@@ -36,6 +36,7 @@ public class GalleryFragment extends Fragment {
 
     FirebaseFirestore db;
     Usuarios user;
+
     String esProfesor = "";
 
     ProgressDialog mDialog;
@@ -69,6 +70,9 @@ public class GalleryFragment extends Fragment {
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                comprobarProfesor(email.getText().toString());
+
                 mDialog.setMessage("Iniciando sesión...");
                 mDialog.setCanceledOnTouchOutside(false);
                 mDialog.show();
@@ -77,8 +81,6 @@ public class GalleryFragment extends Fragment {
                     mDialog.dismiss();
                     Toast.makeText(getActivity(), "Ingrese su clave y contraseña", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    comprobarProfesor(email.getText().toString());
                     iniciarSesion(email.getText().toString(), pass.getText().toString());
                 }
 
@@ -136,6 +138,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private void comprobarProfesor(String e) {
+
         db.collection("Usuarios")
                 .whereEqualTo("correo", e)
                 .get()

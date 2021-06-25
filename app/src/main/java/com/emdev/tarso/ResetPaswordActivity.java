@@ -27,6 +27,7 @@ public class ResetPaswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pasword);
+        ResetPaswordActivity.this.setTitle("Restaurar clave");
 
         mAuth = FirebaseAuth.getInstance();
         mDialog = new ProgressDialog(this);
