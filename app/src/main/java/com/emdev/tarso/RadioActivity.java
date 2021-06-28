@@ -76,9 +76,6 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         }
         w.loadUrl("https://zeno.fm/fmTarso/");*/
 
-
-
-
         /*webLinkRadio.getSettings().setJavaScriptEnabled(true);
         webLinkRadio.getSettings().setAllowContentAccess(true);
         webLinkRadio.getSettings().setDomStorageEnabled(true);

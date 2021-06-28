@@ -43,6 +43,7 @@ import com.emdev.tarso.model.Usuarios;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -52,6 +53,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -63,6 +65,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class MenuEstudiantesActivity extends AppCompatActivity {
 
@@ -94,6 +98,8 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     String cur="";
     String mat="";
     Documentos document;
+
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -634,11 +640,13 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                                downloadFile(documentos);
+                                //downloadFile(documentos);
+                                otroDownload(documentos);
                             }
                         } else {
                             Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                            downloadFile(documentos);
+                            otroDownload(documentos);
+
                         }
 
                         //Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
@@ -682,6 +690,64 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         alert.show();
     }
 
+    private void otroDownload(Documentos documentos) {
+        //Extension
+        String extension = "";
+        if (documentos.getUrl().contentEquals(".pdf")){
+            extension = ".pdf";
+        } else if (documentos.getUrl().contentEquals(".jpg")){
+            extension = ".jpg";
+        }
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(documentos.getUrl());
+        //StorageReference storageRef = storage.getReference().child("documentos/" + mat + "/" + documentos.getNombre() + extension);
+
+        pd = new ProgressDialog(this);
+        pd.setTitle(documentos.getNombre() + extension);
+        pd.setMessage("Descargando,\npor favor espere ...");
+        /*pd.setIndeterminate(true);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
+        pd.show();
+
+        String finalExtension = extension;
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String url = uri.toString();
+                descargarArchivo(MenuEstudiantesActivity.this, documentos.getNombre(), finalExtension, DIRECTORY_DOWNLOADS, url);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                pd.dismiss();
+                Log.e("firebase ", ";local tem file not created  created " + exception.toString());
+                Toast.makeText(MenuEstudiantesActivity.this, "Descarga Incompleta", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void descargarArchivo(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
+        DownloadManager downloadManager = (DownloadManager) context
+                .getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        DownloadManager.Request request1 = new DownloadManager.Request(uri);
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context, destinationDirectory,fileName + fileExtension); //si le hago click se visualiza pero no se guarda
+        request1.setDestinationInExternalPublicDir(destinationDirectory, fileName + fileExtension); //al reves del anterior
+
+        downloadManager.enqueue(request);
+        downloadManager.enqueue(request1);
+
+        pd.dismiss();
+
+    }
+
+    /*
+    ESTE ES EL QUE ESTABA FUNCIONANDO HOY:26/06/21
     private void downloadFile(Documentos doc) {
 
         String extension = "";
@@ -704,17 +770,14 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         //Obtener el servicio
         DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
             case PERMISO_ALMACENAMIENTO2:{
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    //Permiso otorgado
-                    //permisos_ok = true;
-                    Documentos doc = null;
-                    downloadFile(doc);
+                    Toast.makeText(this, "PERMISOS ACEPTADOS\nPruebe nuevamente", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();
                 }
@@ -722,40 +785,6 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         }
     }
 
-    /*private void iniciarDescarga(String url) {
-        //if (permisos_ok){
-            //Solicitud de descarga
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-            //Tipo de red
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-            request.setTitle("Descarga");
-            request.setDescription("Descargando archivo ... ");
-
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + System.currentTimeMillis());
-
-            //Obtener el servicio
-            DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
-            manager.enqueue(request);
-
-        //} else {
-        //    Toast.makeText(this, "Permisos denegados", Toast.LENGTH_SHORT).show();
-        //}
-
-    }*/
-
-    private void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
-        DownloadManager downloadmanager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse(url);
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-
-        request.setDescription("Descargando archivo...");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(context, destinationDirectory, fileName + fileExtension);
-
-        downloadmanager.enqueue(request);
-    }
 
     private void cargarUsuario(String id) {
         db.collection("Usuarios")
@@ -854,9 +883,24 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        downloadFile(documentos);
-                        Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                        //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
+                        //VERIFICAR PERMISOS
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                                //Denegado, solicitarlo
+                                String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                                //Dialogo emergente
+                                requestPermissions(permisos,PERMISO_ALMACENAMIENTO2);
+
+                            } else {
+                                Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                                //downloadFile(documentos);
+                                otroDownload(documentos);
+                            }
+                        } else {
+                            Toast.makeText(MenuEstudiantesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                            otroDownload(documentos);
+
+                        }
                     }
                 });
 

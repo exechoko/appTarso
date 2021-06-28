@@ -73,6 +73,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 public class MenuDocentesActivity extends AppCompatActivity {
 
     Spinner spinCursos, spinAsignatura;
@@ -114,6 +116,8 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 100;
 
+    ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +135,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
         btnSalir = findViewById(R.id.salir);
 
         txtNombre = findViewById(R.id.nombreDocente);
-
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -208,24 +211,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 Toast.makeText(MenuDocentesActivity.this, "Subir una imagen con la noticia", Toast.LENGTH_SHORT).show();
                 //openGallery();
                 dialogSubirNoticia(usuario);
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
-                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                        //Denegado, solicitarlo
-                        ActivityCompat.requestPermissions(MenuDocentesActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISO_ALMACENAMIENTO);
-                        //ActivityCompat.requestPermissions(MenuDocentesActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISO_ALMACENAMIENTO);
-                        //String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        //Dialogo emergente
-                        //requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
-
-                    } else {
-                        Toast.makeText(MenuDocentesActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
-                        CropImage.startPickImageActivity(MenuDocentesActivity.this);
-                    }
-                } else {
-                    Toast.makeText(MenuDocentesActivity.this, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
-                    CropImage.startPickImageActivity(MenuDocentesActivity.this);
-                }*/
 
             }
         });
@@ -315,8 +300,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
         edtNombreCreador = agregar_noticia.findViewById(R.id.edtNombreCreador);
         edtNombreCreador.setText(usuario.getNombre());
         edtNombreCreador.setEnabled(false);
-
-
 
         btnSelect = agregar_noticia.findViewById(R.id.btnSelect);
         btnUpload = agregar_noticia.findViewById(R.id.btnUpload);
@@ -632,9 +615,24 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 holder.doc_download.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        downloadFile(documentos);
-                        Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                        //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
+                        //VERIFICAR PERMISOS
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                                //Denegado, solicitarlo
+                                String [] permisos = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                                //Dialogo emergente
+                                requestPermissions(permisos,PERMISO_ALMACENAMIENTO);
+
+                            } else {
+                                Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                                //downloadFile(documentos);
+                                otroDownload(documentos);
+                            }
+                        } else {
+                            Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
+                            otroDownload(documentos);
+
+                        }
                     }
                 });
 
@@ -671,6 +669,61 @@ public class MenuDocentesActivity extends AppCompatActivity {
         });
 
         alert.show();
+    }
+
+    private void otroDownload(Documentos documentos) {
+        //Extension
+        String extension = "";
+        if (documentos.getUrl().contentEquals(".pdf")){
+            extension = ".pdf";
+        } else if (documentos.getUrl().contentEquals(".jpg")){
+            extension = ".jpg";
+        }
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(documentos.getUrl());
+        //StorageReference storageRef = storage.getReference().child("documentos/" + mat + "/" + documentos.getNombre() + extension);
+
+        pd = new ProgressDialog(this);
+        pd.setTitle(documentos.getNombre() + extension);
+        pd.setMessage("Descargando,\npor favor espere ...");
+        /*pd.setIndeterminate(true);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);*/
+        pd.show();
+
+        String finalExtension = extension;
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String url = uri.toString();
+                descargarArchivo(MenuDocentesActivity.this, documentos.getNombre(), finalExtension, DIRECTORY_DOWNLOADS, url);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                pd.dismiss();
+                Log.e("firebase ", ";local tem file not created  created " + exception.toString());
+                Toast.makeText(MenuDocentesActivity.this, "Descarga Incompleta", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void descargarArchivo(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
+        DownloadManager downloadManager = (DownloadManager) context
+                .getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        DownloadManager.Request request1 = new DownloadManager.Request(uri);
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context, destinationDirectory,fileName + fileExtension); //si le hago click se visualiza pero no se guarda
+        request1.setDestinationInExternalPublicDir(destinationDirectory, fileName + fileExtension); //al reves del anterior
+
+        downloadManager.enqueue(request);
+        downloadManager.enqueue(request1);
+
+        pd.dismiss();
     }
 
     private void buscarTrabajosDialog(String c, String a, String idProfesor) {
@@ -736,13 +789,12 @@ public class MenuDocentesActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                                downloadFile(documentos);
+                                otroDownload(documentos);
                             }
                         } else {
                             Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
-                            downloadFile(documentos);
+                            otroDownload(documentos);
                         }
-
                     }
                 });
 
@@ -754,7 +806,6 @@ public class MenuDocentesActivity extends AppCompatActivity {
                         agregarNota(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId(), documentos);
                     }
                 });
-
 
             }
 
@@ -784,43 +835,12 @@ public class MenuDocentesActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void downloadFile(Documentos doc) {
-
-        String extension = "";
-
-        if (doc.getUrl().contentEquals(".pdf")){
-            extension = ".pdf";
-        } else if (doc.getUrl().contentEquals(".jpg")){
-            extension = ".jpg";
-        }
-
-        //subPath = "DescargasPabloDeTarso/";
-
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(doc.getUrl()));
-        //Tipo de red
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle(doc.getNombre() + extension);
-        request.setDescription("Descargando archivo ... ");
-
-        //request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, subPath + doc.getNombre() + extension);
-
-        //Obtener el servicio
-        DownloadManager manager = (DownloadManager)this.getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
             case PERMISO_ALMACENAMIENTO:{
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    //Permiso otorgado
-                    //permisos_ok = true;
-                    Documentos doc = null;
-                    downloadFile(doc);
+                    Toast.makeText(this, "PERMISOS ACEPTADOS\nPruebe nuevamente", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "PERMISO DENEGADO", Toast.LENGTH_SHORT).show();
                 }

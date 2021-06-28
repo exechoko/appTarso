@@ -67,8 +67,10 @@
 
         <Button
             android:id="@+id/btnIngresar"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginTop="30dp"
             android:text="INGRESAR"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,8 +91,10 @@
 
         <Button
             android:id="@+id/btnRegistrarEst"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginTop="70dp"
             android:backgroundTint="#A8048319"
             android:text="REGISTRARSE"
