@@ -371,7 +371,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         deleteNoticia(adapterNoticias.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
 
-                        Toast.makeText(MenuDocentesActivity.this, "Eliminar noticia", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MenuDocentesActivity.this, "Eliminar noticia", Toast.LENGTH_SHORT).show();
                         //downloadFile(TrabajosActivity.this, doc.getNombre(), "", destinoPath, doc.getUrl());
                     }
                 });
@@ -415,7 +415,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     private void deleteNoticia(String id) {
         AlertDialog.Builder alertBorrarNoticia = new AlertDialog.Builder(MenuDocentesActivity.this)
                 .setTitle("ELIMINAR NOTICIA")
-                .setMessage("¿Está seguro de eliminar la noticia seleccionada?\nUna vez eliminada no se podrá recuperar")
+                .setMessage("¿Está segur@ de eliminar la noticia seleccionada?\nUna vez eliminada no se podrá recuperar")
                 .setCancelable(true);
         alertBorrarNoticia.setPositiveButton("SI, eliminar", new DialogInterface.OnClickListener() {
             @Override
@@ -636,6 +636,13 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     }
                 });
 
+                holder.doc_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteMiTrabajo(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+                    }
+                });
+
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
@@ -669,6 +676,42 @@ public class MenuDocentesActivity extends AppCompatActivity {
         });
 
         alert.show();
+    }
+
+    private void deleteMiTrabajo(String idTrabajo) {
+        AlertDialog.Builder alertBorrarTrabajo = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("ELIMINAR TRABAJO")
+                .setMessage("¿Está segur@ de eliminar el trabajo seleccionado?\nUna vez eliminado no se podrá recuperar")
+                .setCancelable(true);
+        alertBorrarTrabajo.setPositiveButton("SI, eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                db.collection("Documentos").document(idTrabajo)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("BORRAR TRABAJO", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("BORRAR TRABAJO", "Error deleting document", e);
+                            }
+                        });
+                Toast.makeText(MenuDocentesActivity.this, "TRABAJO ELIMINADO", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertBorrarTrabajo.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertBorrarTrabajo.show();
     }
 
     private void otroDownload(Documentos documentos) {
@@ -795,6 +838,13 @@ public class MenuDocentesActivity extends AppCompatActivity {
                             Toast.makeText(MenuDocentesActivity.this, "Espere mientras se descarga", Toast.LENGTH_SHORT).show();
                             otroDownload(documentos);
                         }
+                    }
+                });
+
+                holder.doc_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MenuDocentesActivity.this, "No puede eliminar un trabajo que no sea suyo", Toast.LENGTH_SHORT).show();
                     }
                 });
 

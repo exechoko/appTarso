@@ -14,7 +14,7 @@ import com.emdev.tarso.R;
 public class DocumentosViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
-    public ImageView doc_imagen, doc_download, doc_compartir;
+    public ImageView doc_imagen, doc_download, doc_compartir, doc_delete;
     public TextView doc_nombre, doc_materia, doc_fecha, doc_nota, doc_concepto, doc_creador;
 
     private ItemClickListener itemClickListener;
@@ -31,6 +31,7 @@ public class DocumentosViewHolder extends RecyclerView.ViewHolder
         doc_imagen = (ImageView) itemView.findViewById(R.id.doc_imagen);
         doc_download = (ImageView) itemView.findViewById(R.id.descargar);
         doc_compartir = (ImageView) itemView.findViewById(R.id.compartir);
+        doc_delete = (ImageView) itemView.findViewById(R.id.deleteWork);
 
         //click para cada item
         itemView.setOnClickListener(this);

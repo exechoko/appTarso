@@ -655,6 +655,13 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     }
                 });
 
+                holder.doc_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MenuEstudiantesActivity.this, "No puede eliminar un trabajo que no sea suyo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
@@ -904,6 +911,13 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     }
                 });
 
+                holder.doc_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteMiTrabajo(adapter.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+                    }
+                });
+
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
@@ -939,6 +953,42 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         });
 
         alert.show();
+    }
+
+    private void deleteMiTrabajo(String idTrabajo) {
+        AlertDialog.Builder alertBorrarTrabajo = new AlertDialog.Builder(MenuEstudiantesActivity.this)
+                .setTitle("ELIMINAR TRABAJO")
+                .setMessage("¿Está segur@ de eliminar el trabajo seleccionado?\nUna vez eliminado no se podrá recuperar")
+                .setCancelable(true);
+        alertBorrarTrabajo.setPositiveButton("SI, eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                db.collection("Documentos").document(idTrabajo)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("BORRAR TRABAJO", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("BORRAR TRABAJO", "Error deleting document", e);
+                            }
+                        });
+                Toast.makeText(MenuEstudiantesActivity.this, "TRABAJO ELIMINADO", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertBorrarTrabajo.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertBorrarTrabajo.show();
     }
 
     @Override

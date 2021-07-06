@@ -78,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(irNoticias);
                 break;
 
-            case R.id.salir:
-                //salir
+            case R.id.scanQR:
+
+                Intent irAlScanner = new Intent(MainActivity.this, QrActivity.class);
+                startActivity(irAlScanner);
+
                 break;
 
         }
