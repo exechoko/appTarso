@@ -2,6 +2,7 @@ package com.emdev.tarso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -27,11 +28,15 @@ public class NoticiasActivity extends AppCompatActivity {
     FirebaseFirestore db;
     private SliderView sliderView;
 
+    RecyclerView recyclerImagenes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias);
         NoticiasActivity.this.setTitle("Noticias");
+
+        recyclerImagenes = findViewById(R.id.recyclerImagenes);
 
         //Sliders para noticias
         // creating a new array list fr our array list.
