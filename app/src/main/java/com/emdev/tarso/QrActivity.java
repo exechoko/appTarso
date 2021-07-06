@@ -23,6 +23,7 @@ public class QrActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
+        QrActivity.this.setTitle("Escaner QR");
 
         btnScan = findViewById(R.id.btnScan);
 
