@@ -40,8 +40,10 @@ import android.widget.Toast;
 import com.emdev.tarso.Adapter.SliderData;
 import com.emdev.tarso.Interface.ItemClickListener;
 import com.emdev.tarso.ViewHolder.DocumentosViewHolder;
+import com.emdev.tarso.ViewHolder.FotoViewHolder;
 import com.emdev.tarso.ViewHolder.SliderDataViewHolder;
 import com.emdev.tarso.model.Documentos;
+import com.emdev.tarso.model.Foto;
 import com.emdev.tarso.model.Usuarios;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -81,11 +83,11 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String c="";
     String a="";
     String idProfesor="";
-    Button btnSubirNoticia, btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos, btnAdminNoticias;
-    ImageButton btnFotoPerfilDocente, btnSalir;
+    Button btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos;
+    ImageButton btnSubirNoticia, btnAdminNoticias, btnSubirFoto, btnAdmFotos, btnFotoPerfilDocente, btnSalir;
 
     FirebaseFirestore db;
-    StorageReference storageReference, storageReferenceNews;
+    StorageReference storageReference, storageReferenceNews, storageReferenceFotos;
 
     //Cargar usuario
     Usuarios usuario;
@@ -101,7 +103,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String subPath = "DescargasPabloDeTarso/";
 
     //Para subir un trabajo
-    EditText edtNombreCreador, edtNombreTrabajo, edtNota, edtConcepto;
+    EditText edtNombreCreador, edtNombreFotografia, edtNombreTrabajo, edtNota, edtConcepto;
     Spinner spin_curso_agregar_trab, spin_asig_agregar_trab;
     Button btnSelect, btnUpload;
     String cur="";
@@ -112,9 +114,15 @@ public class MenuDocentesActivity extends AppCompatActivity {
     FirestoreRecyclerAdapter<SliderData, SliderDataViewHolder> adapterNoticias;
     SliderData slider_noti;
 
+    //Para ver las fotos
+    FirestoreRecyclerAdapter<Foto, FotoViewHolder> adapterFotos;
+    Foto fotito;
+
     private FirebaseAuth mAuth;
 
     private static final int PICK_IMAGE = 100;
+    private static final int PICK_IMAGE_FOTO = 101;
+    String bandera = "";
 
     ProgressDialog pd;
 
@@ -125,13 +133,17 @@ public class MenuDocentesActivity extends AppCompatActivity {
         MenuDocentesActivity.this.setTitle("Sección Docentes");
 
         btnSubirNoticia = findViewById(R.id.btnSubirNoticia);
+        btnAdminNoticias = findViewById(R.id.btnAdmNoticia);
+        btnSubirFoto = findViewById(R.id.btnSubirFoto);
+        btnAdmFotos = findViewById(R.id.btnAdmFotos);
+
         btnVerTrabajos = findViewById(R.id.btnVerTrabajo);
 //        btnSeleccionarTrabajo = findViewById(R.id.btnSeleccionarTrabajo);
 //        btnSubirTrabajo = findViewById(R.id.btnSubirTrabajo);
         btnVerMisTrabajos = findViewById(R.id.btnVerMisTrabajos);
         btnSubirMisTrabajos = findViewById(R.id.btnSubirMisTrabajos);
         btnFotoPerfilDocente = findViewById(R.id.fotoPerfilDocente);
-        btnAdminNoticias = findViewById(R.id.btnAdmNoticia);
+
         btnSalir = findViewById(R.id.salir);
 
         txtNombre = findViewById(R.id.nombreDocente);
@@ -140,6 +152,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("documentos");
         storageReferenceNews = FirebaseStorage.getInstance().getReference("noticias");
+        storageReferenceFotos = FirebaseStorage.getInstance().getReference("fotos");
 
         if (getIntent()!=null){
             idProfesor = getIntent().getStringExtra("IDDOCENTE");
@@ -194,7 +207,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
                     Toast.makeText(MenuDocentesActivity.this, "Seleccione un curso y materia", Toast.LENGTH_SHORT).show();
                 } else {
                     buscarTrabajosDialog(c,a, idProfesor);
-                    Toast.makeText(MenuDocentesActivity.this, "Curso: " + c + " " + "Asign: " + a , Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MenuDocentesActivity.this, "Curso: " + c + " " + "Asign: " + a , Toast.LENGTH_SHORT).show();
                     /*Intent irATrabajos = new Intent(MenuEstudiantesActivity.this, TrabajosActivity.class);
                     irATrabajos.putExtra("CURSO", c);
                     irATrabajos.putExtra("ASIGNATURA", a);
@@ -208,10 +221,17 @@ public class MenuDocentesActivity extends AppCompatActivity {
         btnSubirNoticia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MenuDocentesActivity.this, "Subir una imagen con la noticia", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MenuDocentesActivity.this, "Subir una imagen con la noticia", Toast.LENGTH_SHORT).show();
                 //openGallery();
                 dialogSubirNoticia(usuario);
 
+            }
+        });
+
+        btnSubirFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSubirFoto(usuario);
             }
         });
 
@@ -235,8 +255,15 @@ public class MenuDocentesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //crear customdialog para cargar las noticias en un recyclerview y poder eliminarlas
-                Toast.makeText(MenuDocentesActivity.this, "Administrar noticias", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MenuDocentesActivity.this, "Administrar noticias", Toast.LENGTH_SHORT).show();
                 dialogAdministrarNoticias();
+            }
+        });
+
+        btnAdmFotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogAdministrarFotos();
             }
         });
 
@@ -255,6 +282,94 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 cambiarNombre(usuario);
             }
         });
+    }
+
+    private void dialogAdministrarFotos() {
+        final AlertDialog.Builder alertNoticias = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("Fotos")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View verFotos = inflater.inflate(R.layout.datos_en_recycler, null);
+
+        recycler_trabajos = verFotos.findViewById(R.id.recycler_datos);
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        recycler_trabajos.setLayoutManager(layoutManager);
+
+        Query query = db.collection("Fotos");
+        //.orderBy("fecha", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<Foto> options = new FirestoreRecyclerOptions.Builder<Foto>()
+                .setQuery(query, Foto.class)
+                .build();
+
+        adapterFotos = new FirestoreRecyclerAdapter<Foto, FotoViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull FotoViewHolder fotoViewHolder, int i, @NonNull Foto foto) {
+
+            }
+
+            @NonNull
+            @Override
+            public FotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.admin_fotos,parent,false);
+                return new FotoViewHolder(view);
+            }
+        };
+    }
+
+    private void dialogSubirFoto(Usuarios usuario) {
+        final AlertDialog.Builder alerta = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("Subir foto ... ")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View agregar_foto = inflater.inflate(R.layout.agregar_foto, null);
+
+        edtNombreCreador = agregar_foto.findViewById(R.id.edtNombreCreador);
+        edtNombreFotografia = agregar_foto.findViewById(R.id.edtNombreFotografia);
+        edtNombreCreador.setText(usuario.getNombre());
+        edtNombreCreador.setEnabled(false);
+
+        btnSelect = agregar_foto.findViewById(R.id.btnSelect);
+        btnUpload = agregar_foto.findViewById(R.id.btnUpload);
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery2();
+                //CropImage.startPickImageActivity(MenuDocentesActivity.this);
+            }
+        });
+
+        alerta.setView(agregar_foto);
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                /*if (edtNombreCreador.getText().toString().equals("")) {
+                    Toast.makeText(MenuDocentesActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                } else if (slider_noti != null){
+                    String uid = String.valueOf(System.currentTimeMillis());
+                    db.collection("Slider").document(uid).set(slider_noti);
+                    Toast.makeText(MenuDocentesActivity.this, "Agregada correctamente", Toast.LENGTH_SHORT).show();
+                }*/
+            }
+        });
+
+        alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta.show();
+    }
+
+    private void openGallery2() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE_FOTO);
     }
 
     private void cambiarNombre(Usuarios usuario) {
@@ -969,13 +1084,19 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 }
             });
 
-        }/* else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE && data != null && data.getData() != null){
-            subirNoticia(data.getData());
-        }*/
+        }
+
         if (requestCode == PICK_IMAGE  && resultCode == -1) {
             CropImage.activity(CropImage.getPickImageResultUri(this, data)).setGuidelines(CropImageView.Guidelines.ON).setRequestedSize(400, 200).setAspectRatio(2, 1).start((Activity) this);
+            bandera = "NOTICIA";
         }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+        if (requestCode == PICK_IMAGE_FOTO  && resultCode == -1) {
+            CropImage.activity(CropImage.getPickImageResultUri(this, data)).setGuidelines(CropImageView.Guidelines.ON).start((Activity) this);
+            bandera = "FOTO";
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             //Uri resultUri = result.getUri();
             if (resultCode == -1) {
@@ -985,45 +1106,71 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 btnSelect.setText("IMG selec.");
                 btnSelect.setEnabled(false);
 
+                String finalBandera = bandera;
                 btnUpload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        subirNoticia(result.getUri());
-                        btnUpload.setText("IMG. almac.");
-                        btnUpload.setEnabled(false);
+                        if (finalBandera.equals("NOTICIA")){
+                            subirNoticia(result.getUri());
+                            btnUpload.setText("IMG. almac.");
+                            btnUpload.setEnabled(false);
 
-                        Log.d("Nombre uri", data.toString());
+                            Log.d("Nombre uri", data.toString());
+                        } else if (finalBandera.equals("FOTO")){
+
+                            if (edtNombreFotografia.getText().toString().equals("")){
+                                Toast.makeText(MenuDocentesActivity.this, "Necesita ingresar\nun nombre a la foto", Toast.LENGTH_SHORT).show();
+                            } else {
+                                subirFoto(result.getUri());
+                                btnUpload.setText("IMG. almac.");
+                                btnUpload.setEnabled(false);
+                                Log.d("Nombre uri", data.toString());
+                            }
+                        } else {
+                            Toast.makeText(MenuDocentesActivity.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });
-
-                //subirNoticia(result.getUri());
-
-                //No hay dialog con botones
-                /*btnSelect.setText("IMG SELEC.");
-                btnSelect.setClickable(false);
-                btnSelect.setBackgroundColor(0);*/
-
-                /*try {
-                    //this.thumb_bitmap = new Compressor(this).setMaxWidth(300).setMaxHeight(300).setQuality(90).compressToBitmap(file);
-                    thumb_bitmap = new Compressor(this)
-                            .setMaxHeight(200)
-                            .setMaxWidth(200)
-                            .setQuality(100)
-                            .compressToBitmap(file);
-
-                }
-                catch (IOException iOException) {
-                    iOException.printStackTrace();
-                }
-
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 90, (OutputStream)byteArrayOutputStream);
-                thumb_byte = byteArrayOutputStream.toByteArray();*/
             }
         }
 
+
+
+    }
+
+    private void subirFoto(Uri data) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Subir foto ... ");
+        progressDialog.show();
+
+        //Ruta en el Storage
+        StorageReference reference = storageReferenceFotos.child(System.currentTimeMillis() + ".jpg");
+        reference.putFile(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete());
+                        Uri uri = uriTask.getResult();
+
+                        String nombreFoto = edtNombreFotografia.getText().toString();
+                        Foto foto = new Foto(nombreFoto,usuario.getNombre(),uri.toString());
+                        String id = String.valueOf(System.currentTimeMillis());
+                        db.collection("Fotos").document(id).set(foto);
+
+                        Toast.makeText(MenuDocentesActivity.this, "Foto subida correctamente", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progress = (100.0 * snapshot.getBytesTransferred())/snapshot.getTotalByteCount();
+                        progressDialog.setMessage("Subiendo foto ... " + (int) progress + "%");
+                    }
+                });
     }
 
     private void subirNoticia(Uri data) {

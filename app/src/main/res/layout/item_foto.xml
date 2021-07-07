@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:background="#FFFFFF"
     android:layout_margin="8dp"
     app:cardCornerRadius="10dp"
@@ -14,14 +14,26 @@
         android:background="#ECECEC">
 
         <ImageView
-            android:id="@+id/doc_imagen"
-            android:src="@drawable/icon_pdf"
+            android:id="@+id/foto"
+            android:src="@drawable/loading_min"
+            android:background="#0C0C0C"
             android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/nombreFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Foto 1"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_alignParentTop="true"
+            android:background="#80A80000"
+            android:textColor="@color/white" />
+
+        <!--ImageView
             android:id="@+id/descargar"
             android:src="@drawable/icon_download"
             android:layout_alignParentRight="true"
@@ -29,7 +41,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp" /-->
 
 
     </RelativeLayout>

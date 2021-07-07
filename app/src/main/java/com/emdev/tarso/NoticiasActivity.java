@@ -1,21 +1,37 @@
 package com.emdev.tarso;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.emdev.tarso.Adapter.SliderAdapter;
 import com.emdev.tarso.Adapter.SliderData;
+import com.emdev.tarso.Interface.ItemClickListener;
+import com.emdev.tarso.ViewHolder.FotoViewHolder;
+import com.emdev.tarso.ViewHolder.SliderDataViewHolder;
+import com.emdev.tarso.model.Foto;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,6 +45,9 @@ public class NoticiasActivity extends AppCompatActivity {
     private SliderView sliderView;
 
     RecyclerView recyclerImagenes;
+    GridLayoutManager gridLayoutManager;
+    FirestoreRecyclerAdapter<Foto, FotoViewHolder> adapterFotos;
+    ImageView img_detalle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +56,8 @@ public class NoticiasActivity extends AppCompatActivity {
         NoticiasActivity.this.setTitle("Noticias");
 
         recyclerImagenes = findViewById(R.id.recyclerImagenes);
+        gridLayoutManager = new GridLayoutManager(this, 3);
+        recyclerImagenes.setLayoutManager(gridLayoutManager);
 
         //Sliders para noticias
         // creating a new array list fr our array list.
@@ -49,6 +70,73 @@ public class NoticiasActivity extends AppCompatActivity {
 
         // calling our method to load images.
         loadNoticias();
+        loadFotos();
+    }
+
+    private void loadFotos() {
+
+        Query query = db.collection("Fotos");
+        //.orderBy("fecha", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<Foto> options = new FirestoreRecyclerOptions.Builder<Foto>()
+                .setQuery(query, Foto.class)
+                .build();
+
+        adapterFotos = new FirestoreRecyclerAdapter<Foto, FotoViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull FotoViewHolder holder, int i, @NonNull Foto foto) {
+                holder.nombreFoto.setText(foto.getNombre());
+                Picasso.get().load(foto.getUrl()).into(holder.foto);
+
+                holder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        //Toast.makeText(NoticiasActivity.this, "Subida por " + foto.getCreador(), Toast.LENGTH_SHORT).show();
+                        verImagenAmpliada(foto);
+                    }
+                });
+
+
+            }
+
+            @NonNull
+            @Override
+            public FotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_foto,parent,false);
+                return new FotoViewHolder(view);
+            }
+        };
+
+        recyclerImagenes.setAdapter(adapterFotos);
+    }
+
+    private void verImagenAmpliada(Foto fotoModel) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(NoticiasActivity.this)
+                .setTitle(fotoModel.getNombre())
+                .setCancelable(true);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View detalle_foto_layout = inflater.inflate(R.layout.detalle_foto, null);
+
+        img_detalle = detalle_foto_layout.findViewById(R.id.img_detalle);
+
+        //Picasso.with(getApplicationContext()).load(fotoModel.getUrl()).resize(800,800).centerCrop().into(img_detalle);
+        Picasso.get().load(fotoModel.getUrl()).resize(800,800).centerCrop().into(img_detalle);
+
+
+        alert.setView(detalle_foto_layout);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        alert.show();
+
     }
 
     private void loadNoticias() {
@@ -109,5 +197,17 @@ public class NoticiasActivity extends AppCompatActivity {
                 Toast.makeText(NoticiasActivity.this, "Fail to load slider data..", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapterFotos.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapterFotos.stopListening();
     }
 }
