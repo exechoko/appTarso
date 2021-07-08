@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -17,6 +18,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +50,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,6 +69,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
@@ -75,7 +80,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
     boolean permisos_ok = false;
 
     Spinner spinCursos, spinAsignatura;
-    Button btnVerTrabajos, btnVerMisTrabajos, btnSubirTrabajos;
+    CardView btnVerTrabajos, btnVerMisTrabajos, btnSubirTrabajos;
     ImageButton btnFotoPerfilEstudiante, btnSalir;
     String c="";
     String a="";
@@ -106,6 +111,10 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_estudiantes);
         MenuEstudiantesActivity.this.setTitle("Sección Est.");
+        ColorDrawable colorDrawable
+                = new ColorDrawable(Color.parseColor("#0080B3"));
+        Objects.requireNonNull(MenuEstudiantesActivity.this.getSupportActionBar()).setBackgroundDrawable(colorDrawable);
+        Objects.requireNonNull(MenuEstudiantesActivity.this.getSupportActionBar()).setElevation(0f);
 
         txtNombre = findViewById(R.id.nombreEstudiante);
         btnVerTrabajos = findViewById(R.id.btnTrabajos);
@@ -667,6 +676,7 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
                     public void onClick(View view, int position, boolean isLongClick) {
                         Toast.makeText(MenuEstudiantesActivity.this, "Creado por: " + documentos.getCreador(), Toast.LENGTH_SHORT).show();
                         /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickEnDoc.getUrl())));*/
+                        Log.d("NOMBREARCHIVO", documentos.getUrl());
                     }
                 });
             }

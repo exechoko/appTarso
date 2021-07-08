@@ -56,7 +56,7 @@ public class NoticiasActivity extends AppCompatActivity {
         NoticiasActivity.this.setTitle("Noticias");
 
         recyclerImagenes = findViewById(R.id.recyclerImagenes);
-        gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
         recyclerImagenes.setLayoutManager(gridLayoutManager);
 
         //Sliders para noticias

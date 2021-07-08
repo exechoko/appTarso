@@ -88,6 +88,8 @@
                     android:layout_height="wrap_content">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/btnSubirNoticia"
+                        android:clickable="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -103,8 +105,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageButton
-                                android:id="@+id/btnSubirNoticia"
+                            <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:background="@drawable/ic_agregar_noticia"
@@ -122,6 +123,8 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/btnAdmNoticia"
+                        android:clickable="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -137,8 +140,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageButton
-                                android:id="@+id/btnAdmNoticia"
+                            <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:background="@drawable/ic_adm_noticias"/>
@@ -155,6 +157,8 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/btnSubirFoto"
+                        android:clickable="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -170,8 +174,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageButton
-                                android:id="@+id/btnSubirFoto"
+                            <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:background="@drawable/ic_subir_fotografia" />
@@ -188,6 +191,8 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/btnAdmFotos"
+                        android:clickable="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -203,8 +208,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageButton
-                                android:id="@+id/btnAdmFotos"
+                            <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:background="@drawable/ic_adm_fotos"/>
@@ -225,13 +229,213 @@
 
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/menuTrabajos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#DC000000"
+            app:layout_constraintTop_toBottomOf="@id/menuNoticiaImagenes"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Trabajos prácticos"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black"
+                        android:text="Curso"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerCurso"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#AAAAAA"
+                        android:entries="@array/Cursos"
+                        android:spinnerMode="dropdown"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black"
+                        android:text="Asignatura"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerAsignatura"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#AAAAAA"
+                        android:entries="@array/Asignaturas"/>
+
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnVerTrabajo"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:cardElevation="6dp"
+                    app:cardCornerRadius="12dp"
+                    android:layout_margin="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_buscar_trabajo"
+                            android:text=""/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:textColor="#000000"
+                            android:textStyle="bold"
+                            android:text="Buscar trabajos"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <GridLayout
+                    android:columnCount="2"
+                    android:rowCount="1"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnVerMisTrabajos"
+                        android:clickable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        app:cardElevation="6dp"
+                        app:cardCornerRadius="12dp"
+                        android:layout_margin="12dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/ic_mis_documentos"
+                                android:text=""/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:text="Mis trabajos"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnSubirMisTrabajos"
+                        android:clickable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        app:cardElevation="6dp"
+                        app:cardCornerRadius="12dp"
+                        android:layout_margin="12dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/ic_subir_documentos"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Subir trabajo"
+                                android:textColor="#000000"
+                                android:textStyle="bold"/>
+
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </GridLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
 
 
 
 
-        <TextView
+
+        <!--TextView
             android:id="@+id/txtTrabajo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -244,9 +448,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menuNoticiaImagenes" />
+            app:layout_constraintTop_toBottomOf="@id/menuNoticiaImagenes" /-->
 
-        <TextView
+        <!--TextView
             android:id="@+id/txtView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -257,9 +461,9 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/spinnerCurso"
             app:layout_constraintTop_toBottomOf="@id/txtTrabajo"
-            tools:layout_editor_absoluteX="15dp" />
+            tools:layout_editor_absoluteX="15dp" /-->
 
-        <Spinner
+        <!--Spinner
             android:id="@+id/spinnerCurso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -269,9 +473,9 @@
             android:entries="@array/Cursos"
             android:spinnerMode="dropdown"
             app:layout_constraintStart_toStartOf="@+id/txtView"
-            app:layout_constraintTop_toBottomOf="@id/txtView" />
+            app:layout_constraintTop_toBottomOf="@id/txtView" /-->
 
-        <TextView
+        <!--TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -295,9 +499,9 @@
             android:entries="@array/Asignaturas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView3" />
+            app:layout_constraintTop_toBottomOf="@id/textView3" /-->
 
-        <Button
+        <!--Button
             android:id="@+id/btnVerTrabajo"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
@@ -306,25 +510,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinnerAsignatura" />
+            app:layout_constraintTop_toBottomOf="@id/spinnerAsignatura" /-->
 
 
-        <TextView
-            android:id="@+id/txtMisTrabajos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Trabajos Practicos "
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnVerTrabajo"
-            tools:layout_editor_absoluteX="15dp" />
 
-        <Button
+        <!--Button
             android:id="@+id/btnVerMisTrabajos"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
@@ -333,9 +523,9 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@id/btnSubirMisTrabajos"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" /-->
 
-        <Button
+        <!--Button
             android:id="@+id/btnSubirMisTrabajos"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
@@ -345,7 +535,7 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnVerMisTrabajos"
-            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" />
+            app:layout_constraintTop_toBottomOf="@id/txtMisTrabajos" /-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

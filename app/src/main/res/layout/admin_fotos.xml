@@ -14,27 +14,27 @@
         android:background="#ECECEC">
 
         <ImageView
-            android:id="@+id/slider_imagen"
-            android:src="@drawable/ic_newspaper"
+            android:id="@+id/img_foto"
+            android:src="@drawable/icon_imagen"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:layout_width="95dp"
             android:layout_height="95dp" />
 
         <TextView
-            android:id="@+id/slider_creador"
+            android:id="@+id/foto_creador"
             android:text="Creador"
             android:textColor="#000000"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:layout_toRightOf="@id/slider_imagen"
+            android:layout_toRightOf="@id/img_foto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/slider_delete"
+            android:id="@+id/foto_delete"
             android:padding="2dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"

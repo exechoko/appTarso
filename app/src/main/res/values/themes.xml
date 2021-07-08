@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.Tarso" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#11A1BA</item>
+        <item name="colorPrimary">#0080B3</item>
         <item name="colorPrimaryVariant">#0080B3</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#03DAC5</item>
-        <item name="colorSecondaryVariant">#018786</item>
+        <item name="colorSecondaryVariant">#0080B3</item>
         <item name="colorOnSecondary">#000000</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>

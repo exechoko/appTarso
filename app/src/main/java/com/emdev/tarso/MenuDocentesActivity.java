@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +42,7 @@ import android.widget.Toast;
 
 import com.emdev.tarso.Adapter.SliderData;
 import com.emdev.tarso.Interface.ItemClickListener;
+import com.emdev.tarso.ViewHolder.AdminFotoViewHolder;
 import com.emdev.tarso.ViewHolder.DocumentosViewHolder;
 import com.emdev.tarso.ViewHolder.FotoViewHolder;
 import com.emdev.tarso.ViewHolder.SliderDataViewHolder;
@@ -74,6 +78,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
@@ -83,8 +88,10 @@ public class MenuDocentesActivity extends AppCompatActivity {
     String c="";
     String a="";
     String idProfesor="";
-    Button btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos;
-    ImageButton btnSubirNoticia, btnAdminNoticias, btnSubirFoto, btnAdmFotos, btnFotoPerfilDocente, btnSalir;
+    //Button btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos;
+    ImageButton /*btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos, btnSubirNoticia, btnAdminNoticias, btnSubirFoto, btnAdmFotos,*/ btnFotoPerfilDocente, btnSalir;
+    CardView btnVerTrabajos, btnVerMisTrabajos, btnSubirMisTrabajos, btnSubirNoticia, btnAdminNoticias, btnSubirFoto, btnAdmFotos;
+
 
     FirebaseFirestore db;
     StorageReference storageReference, storageReferenceNews, storageReferenceFotos;
@@ -115,7 +122,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     SliderData slider_noti;
 
     //Para ver las fotos
-    FirestoreRecyclerAdapter<Foto, FotoViewHolder> adapterFotos;
+    FirestoreRecyclerAdapter<Foto, AdminFotoViewHolder> adapterFotos;
     Foto fotito;
 
     private FirebaseAuth mAuth;
@@ -131,6 +138,10 @@ public class MenuDocentesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_docentes);
         MenuDocentesActivity.this.setTitle("Sección Docentes");
+        ColorDrawable colorDrawable
+                = new ColorDrawable(Color.parseColor("#0080B3"));
+        Objects.requireNonNull(MenuDocentesActivity.this.getSupportActionBar()).setBackgroundDrawable(colorDrawable);
+        Objects.requireNonNull(MenuDocentesActivity.this.getSupportActionBar()).setElevation(0f);
 
         btnSubirNoticia = findViewById(R.id.btnSubirNoticia);
         btnAdminNoticias = findViewById(R.id.btnAdmNoticia);
@@ -285,7 +296,7 @@ public class MenuDocentesActivity extends AppCompatActivity {
     }
 
     private void dialogAdministrarFotos() {
-        final AlertDialog.Builder alertNoticias = new AlertDialog.Builder(MenuDocentesActivity.this)
+        final AlertDialog.Builder alertFotos = new AlertDialog.Builder(MenuDocentesActivity.this)
                 .setTitle("Fotos")
                 .setCancelable(false);
 
@@ -303,20 +314,83 @@ public class MenuDocentesActivity extends AppCompatActivity {
                 .setQuery(query, Foto.class)
                 .build();
 
-        adapterFotos = new FirestoreRecyclerAdapter<Foto, FotoViewHolder>(options) {
+        adapterFotos = new FirestoreRecyclerAdapter<Foto, AdminFotoViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FotoViewHolder fotoViewHolder, int i, @NonNull Foto foto) {
+            protected void onBindViewHolder(@NonNull AdminFotoViewHolder holder, int i, @NonNull Foto foto) {
+                holder.foto_creador.setText("Subida por:\n" + foto.getCreador());
 
+                Picasso.get().load(foto.getUrl()).into(holder.img_foto);
+
+                holder.foto_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteFoto(adapterFotos.getSnapshots().getSnapshot(holder.getAdapterPosition()).getId());
+
+                    }
+                });
             }
 
             @NonNull
             @Override
-            public FotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public AdminFotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.admin_fotos,parent,false);
-                return new FotoViewHolder(view);
+                return new AdminFotoViewHolder(view);
             }
         };
+
+        recycler_trabajos.setAdapter(adapterFotos);
+        adapterFotos.startListening();
+
+        alertFotos.setView(verFotos);
+
+        alertFotos.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                adapterFotos.stopListening();
+                dialogInterface.cancel();
+
+            }
+        });
+
+        alertFotos.show();
+    }
+
+    private void deleteFoto(String id) {
+        AlertDialog.Builder alertBorrarFoto = new AlertDialog.Builder(MenuDocentesActivity.this)
+                .setTitle("ELIMINAR FOTO")
+                .setMessage("¿Está segur@ de eliminar la foto seleccionada?\nUna vez eliminada no se podrá recuperar")
+                .setCancelable(true);
+        alertBorrarFoto.setPositiveButton("SI, eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                db.collection("Fotos").document(id)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("BORRAR FOTO", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("BORRAR FOTO", "Error deleting document", e);
+                            }
+                        });
+                Toast.makeText(MenuDocentesActivity.this, "Foto eliminada", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertBorrarFoto.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertBorrarFoto.show();
+
     }
 
     private void dialogSubirFoto(Usuarios usuario) {

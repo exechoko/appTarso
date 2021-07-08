@@ -103,7 +103,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_alignParentBottom="true"
-                android:text="SELEC. ARCHIVO"
+                android:text="SELEC ARCHIVO"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
