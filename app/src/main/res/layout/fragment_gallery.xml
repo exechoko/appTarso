@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#8AA60000"
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
                 android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/white"

@@ -62,7 +62,7 @@
             android:textAlignment="center"
             android:layout_below="@id/play"/>
 
-        <TextView
+        <!--TextView
             android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,14 +72,14 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="Si tiene problema para escuchar\nhaz click en el boton de abajo"/>
+            android:text="Si tiene problema para escuchar\nhaz click en el boton de abajo"/-->
 
         <Button
             android:id="@+id/abrirEnElNavegador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Abrir radio\nen el navegador"
-            android:layout_below="@id/subtitle"
+            android:text="Reproducir"
+            android:layout_below="@id/title"
             android:backgroundTint="#A8AA1919"
             android:layout_centerHorizontal="true"/>
 

@@ -62,7 +62,7 @@
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:text=""
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>

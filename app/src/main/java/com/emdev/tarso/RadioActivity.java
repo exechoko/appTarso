@@ -35,7 +35,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RadioActivity extends AppCompatActivity implements Playable {
+public class RadioActivity extends AppCompatActivity /*implements Playable*/ {
 
     CircleImageView play;
     Button abrirNavegador;
@@ -58,9 +58,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         setContentView(R.layout.activity_radio);
         RadioActivity.this.setTitle("FM Tarso");
 
-        play = findViewById(R.id.play);
+        /*play = findViewById(R.id.play);
         title = findViewById(R.id.title);
-        player = new MediaPlayer();
+        player = new MediaPlayer();*/
         abrirNavegador = findViewById(R.id.abrirEnElNavegador);
 
         //webAudio();
@@ -89,15 +89,15 @@ public class RadioActivity extends AppCompatActivity implements Playable {
 
         webLinkRadio.loadUrl("https://zeno.fm/fmTarso/");*/
 
-        popluateTracks();
+        /*popluateTracks();*/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             createChannel();
             registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
             startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
-        }
+        }*/
 
-        play.setOnClickListener(new View.OnClickListener() {
+        /*play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isPlaying){
@@ -106,7 +106,7 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                     onTrackPlay();
                 }
             }
-        });
+        });*/
 
         abrirNavegador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +117,7 @@ public class RadioActivity extends AppCompatActivity implements Playable {
             }
         });
 
-        initializeMediaPlayer();
+        /*initializeMediaPlayer();*/
     }
 
     /*private void webAudio() {
@@ -185,12 +185,8 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         w.loadData(about, "text/html", "UTF-8");
     }*/
 
-    private void startPlaying() {
-        /*buttonStopPlay.setEnabled(true);
-        buttonStopPlay.setVisibility(View.VISIBLE);
-        buttonPlay.setEnabled(false);
+    /*private void startPlaying() {
 
-        playSeekBar.setVisibility(View.VISIBLE);*/
         player.prepareAsync();
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
@@ -200,12 +196,10 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                 mp.start(); //antes player.start()
             }
         });
-    }
+    }*/
 
-    private void stopPlaying() {
-        /*if (player.isPlaying()) {
+    /*private void stopPlaying() {
 
-        }*/
         player.stop();
         player.release();
         initializeMediaPlayer();
@@ -214,9 +208,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         //buttonStopPlay.setVisibility(View.GONE);
         //buttonStopPlay.setEnabled(false);
         //playSeekBar.setVisibility(View.INVISIBLE);
-    }
+    }*/
 
-    private void initializeMediaPlayer() {
+    /*private void initializeMediaPlayer() {
         try {
             player.reset();
             player.setDataSource(STREAM_URL);
@@ -228,17 +222,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
 
-        /*player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-
-            public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                playSeekBar.setSecondaryProgress(percent);
-                Log.i("Buffering", "" + percent);
-            }
-        });*/
-    }
-
-    private void createChannel() {
+    /*private void createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,
                     "EMDev", NotificationManager.IMPORTANCE_LOW);
@@ -248,10 +234,10 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                 notificationManager.createNotificationChannel(channel);
             }
         }
-    }
+    }*/
 
     //populate list with tracks
-    private void popluateTracks(){
+    /*private void popluateTracks(){
         tracks = new ArrayList<>();
 
         //tracks.add(new Track("Track 1", "Artist 1", R.drawable.t1));
@@ -281,9 +267,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                     break;
             }
         }
-    };
+    };*/
 
-    @Override
+    /*@Override
     public void onTrackPrevious() {
 
         position--;
@@ -291,9 +277,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                 R.drawable.ic_pause, position, tracks.size()-1);
         title.setText(tracks.get(position).getTitulo());
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onTrackPlay() {
 
         CreateNotification.createNotification(RadioActivity.this, tracks.get(position),
@@ -303,9 +289,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         isPlaying = true;
         startPlaying();
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onTrackPause() {
 
         CreateNotification.createNotification(RadioActivity.this, tracks.get(position),
@@ -315,9 +301,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         isPlaying = false;
         stopPlaying();
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onTrackNext() {
 
         position++;
@@ -325,9 +311,9 @@ public class RadioActivity extends AppCompatActivity implements Playable {
                 R.drawable.ic_pause, position, tracks.size()-1);
         title.setText(tracks.get(position).getTitulo());
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         super.onDestroy();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -335,5 +321,5 @@ public class RadioActivity extends AppCompatActivity implements Playable {
         }
 
         unregisterReceiver(broadcastReceiver);
-    }
+    }*/
 }
