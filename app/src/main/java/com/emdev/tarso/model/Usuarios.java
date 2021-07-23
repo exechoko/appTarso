@@ -8,6 +8,8 @@ public class Usuarios {
     private String isProfesor;
     private String telefono;
     private String id;
+    private String imageURL;
+    private String status;
 
     public Usuarios() {
     }
@@ -20,6 +22,8 @@ public class Usuarios {
         this.isProfesor = isProfesor;
         this.telefono = telefono;
         this.id = id;
+        this.imageURL = "default";
+        this.status = "online";
     }
 
     public String getTelefono() {
@@ -76,5 +80,21 @@ public class Usuarios {
 
     public void setIsProfesor(String isProfesor) {
         this.isProfesor = isProfesor;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

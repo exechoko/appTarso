@@ -2,13 +2,18 @@ package com.emdev.tarso;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -57,6 +62,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        //Para obtener el token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+                        String msg = token;
+                        Log.d("TAG", msg);
+                        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
 
@@ -82,6 +107,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent irAlScanner = new Intent(MainActivity.this, QrActivity.class);
                 startActivity(irAlScanner);
+
+                break;
+
+            case R.id.item_chat:
+
+                Toast.makeText(this, "Chat", Toast.LENGTH_SHORT).show();
+                Intent irAlChat = new Intent(MainActivity.this, StartActivity.class);
+                startActivity(irAlChat);
 
                 break;
 

@@ -1386,12 +1386,12 @@ public class MenuDocentesActivity extends AppCompatActivity {
         dialogoNota.show();
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    }
+    }*/
 
     @Override
     protected void onStop() {
@@ -1399,12 +1399,12 @@ public class MenuDocentesActivity extends AppCompatActivity {
         if (adapter!=null){
             adapter.stopListening();
         }
-        mAuth.signOut();
+        /*mAuth.signOut();*/
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mAuth.signOut();
+        /*mAuth.signOut();*/
     }
 }

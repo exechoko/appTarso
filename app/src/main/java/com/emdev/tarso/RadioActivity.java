@@ -2,35 +2,18 @@ package com.emdev.tarso;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.emdev.tarso.Interface.Playable;
-import com.emdev.tarso.Notifications.CreateNotification;
-import com.emdev.tarso.Services.OnClearFromRecentService;
 import com.emdev.tarso.model.Track;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;

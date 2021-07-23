@@ -16,14 +16,20 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_tarso"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_tarso_round"
         android:supportsRtl="true"
-        android:hardwareAccelerated="true"
         android:theme="@style/Theme.Tarso">
-        <activity android:name=".QrActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".MainChatActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".StartActivity" />
+        <activity android:name=".MessageActivity" />
+        <activity
+            android:name=".QrActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RadioActivity"
             android:parentActivityName=".MainActivity" />
@@ -83,9 +89,14 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-        <receiver android:name=".Services.NotificationActionService" />
-
-        <service android:name=".Services.OnClearFromRecentService" />
+        <service
+            android:name=".Notifications.MyFirebaseMessaging"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

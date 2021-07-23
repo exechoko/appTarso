@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -164,20 +165,17 @@ public class SlideshowFragment extends Fragment {
                     });
         }
 
-
     }
-/*
-    @Override
+
+    /*@Override
     public void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = mAuth.getInstance().getCurrentUser();
         if (user != null && esProfesor.equals("YES")) {
             // User is signed in
             Intent irMenuDocente = new Intent(getContext(), MenuDocentesActivity.class);
             irMenuDocente.putExtra("IDDOCENTE", mAuth.getCurrentUser().getUid());
             startActivity(irMenuDocente);
-        } else {
-            // No user is signed in
         }
     }*/
 
