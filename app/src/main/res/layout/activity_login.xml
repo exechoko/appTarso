@@ -4,45 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_fondo_login"
     tools:context=".LoginActivity">
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="16dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="Iniciar sesión"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/email"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="10dp"
-            android:hint="Email"/>
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="Correo"
+            android:textColorHint="@color/white">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#8AA60000"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text=""
+                android:inputType="textEmailAddress"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/password"
-            android:inputType="textPassword"
-            android:layout_marginTop="10dp"
-            android:hint="Password"/>
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="5dp"
+            android:hint="Contraseña"
+            android:textColorHint="@color/white"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#8AA60000"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:text=""
+                android:inputType="textPassword"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="login"
+            android:text="Ingresar"
             android:id="@+id/btn_login"
+            android:backgroundTint="@color/black"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textColor="#fff"/>
 
         <TextView
@@ -50,14 +87,27 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="¿Olvidó su clave?"
+            android:textColor="#000000"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
             android:layout_gravity="end"
             android:textStyle="bold"
             android:id="@+id/forgot_password" />
 
-
     </LinearLayout>
 
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation"
+        android:elevation="10dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="28893-book-loading.json"
+        app:lottie_imageAssetsFolder="assets"
+        app:lottie_loop="true" />
 
 </RelativeLayout>

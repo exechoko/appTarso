@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NoticiasActivity extends AppCompatActivity {
 
@@ -54,6 +57,10 @@ public class NoticiasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias);
         NoticiasActivity.this.setTitle("Noticias");
+        ColorDrawable colorDrawable
+                = new ColorDrawable(Color.parseColor("#0080B3"));
+        Objects.requireNonNull(NoticiasActivity.this.getSupportActionBar()).setBackgroundDrawable(colorDrawable);
+        Objects.requireNonNull(NoticiasActivity.this.getSupportActionBar()).setElevation(0f);
 
         recyclerImagenes = findViewById(R.id.recyclerImagenes);
         gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);

@@ -35,6 +35,7 @@
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
 
+
     <style name="Theme.Tarso.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Tarso.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -9,8 +9,8 @@ android {
         applicationId "com.emdev.tarso"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11
-        versionName "2.0.0"
+        versionCode 12
+        versionName "2.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

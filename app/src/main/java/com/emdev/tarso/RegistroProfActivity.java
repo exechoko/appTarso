@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistroProfActivity extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class RegistroProfActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,9 @@ public class RegistroProfActivity extends AppCompatActivity {
                             String uid = user.getUid();
                             db.collection("Usuarios").document(uid).set(estudiante);
                             db.collection("SolicitudesProfesores").document(uid).set(nuevaSolicitud);
+
+                            reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                            reference.setValue(estudiante);
 
                             Toast.makeText(RegistroProfActivity.this, "Espere a que se verifique su cuenta como Docente.\nSe le informará a su nro telefónico o su correo electrónico.\nMuchas Gracias.", Toast.LENGTH_LONG).show();
 

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.emdev.tarso.MainActivity;
 import com.emdev.tarso.MenuEstudiantesActivity;
@@ -26,6 +27,8 @@ import com.emdev.tarso.R;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    WebView webView;
+    SwipeRefreshLayout swipe;
 
     String facebookId = "fb://page/111949687597169";
     String urlFacebookPage = "https://www.facebook.com/EMDevSoftware";
@@ -37,28 +40,43 @@ public class HomeFragment extends Fragment {
 
         ImageView emdev;
         emdev = root.findViewById(R.id.emdev);
-        WebView webView = root.findViewById(R.id.webView);
+        webView = root.findViewById(R.id.webView);
 
-        if (Build.VERSION.SDK_INT >= 19) {
-            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        }
-
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://fundacionpresenciapresente.org.ar/");
+        swipe = root.findViewById(R.id.swipeContainer);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadWeb();
+            }
+        });
+        LoadWeb();
 
         emdev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "Click en el banner", Toast.LENGTH_SHORT).show();
                 dialogEMDEV();
-
-
-
             }
         });
 
         return root;
+    }
+
+    private void LoadWeb() {
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        //webView.getSettings().setJavaScriptEnabled(true);
+        //webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl("https://fundacionpresenciapresente.org.ar/");
+
+        swipe.setRefreshing(true);
+        webView.setWebViewClient(new WebViewClient()
+        {
+            public  void  onPageFinished(WebView view, String url){
+                swipe.setRefreshing(false);
+            }
+        });
     }
 
     private void dialogEMDEV() {

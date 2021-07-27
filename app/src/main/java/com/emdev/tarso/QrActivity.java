@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.Objects;
 
 public class QrActivity extends AppCompatActivity {
 
@@ -24,6 +28,10 @@ public class QrActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
         QrActivity.this.setTitle("Escaner QR");
+        ColorDrawable colorDrawable
+                = new ColorDrawable(Color.parseColor("#0080B3"));
+        Objects.requireNonNull(QrActivity.this.getSupportActionBar()).setBackgroundDrawable(colorDrawable);
+        Objects.requireNonNull(QrActivity.this.getSupportActionBar()).setElevation(0f);
 
         btnScan = findViewById(R.id.btnScan);
 

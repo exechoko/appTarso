@@ -59,7 +59,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         final Usuarios user = mUsers.get(position);
         holder.username.setText(user.getNombre());
         if (user.getImageURL().equals("default")){
-            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
+            holder.profile_image.setImageResource(R.drawable.ic_notification);
         } else {
             Picasso.get().load(user.getImageURL()).into(holder.profile_image);
         }
@@ -121,41 +121,38 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private void lastMessage(final String userid, final TextView last_msg){
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Chats")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Chat chat = document.toObject(Chat.class);
-                                if (firebaseUser != null && chat != null) {
-                                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
-                                            chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
-                                        theLastMessage = chat.getMessage();
-                                    }
-                                }
-                            }
-
-                            switch (theLastMessage){
-                                case  "default":
-                                    last_msg.setText("No Message");
-                                    break;
-
-                                default:
-                                    last_msg.setText(theLastMessage);
-                                    break;
-                            }
-
-                            theLastMessage = "default";
-
-                        } else {
-                            Log.d("USERADAPTER", "Error getting documents: ", task.getException());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (firebaseUser != null && chat != null) {
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
                         }
                     }
-                });
+                }
+
+                switch (theLastMessage){
+                    case  "default":
+                        last_msg.setText("Sin mensajes");
+                        break;
+
+                    default:
+                        last_msg.setText(theLastMessage);
+                        break;
+                }
+
+                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

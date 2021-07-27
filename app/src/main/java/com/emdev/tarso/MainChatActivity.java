@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,13 +36,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -50,75 +55,108 @@ public class MainChatActivity extends AppCompatActivity {
     TextView username;
 
     FirebaseUser firebaseUser;
-    DocumentReference reference;
-    FirebaseFirestore db;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_chat);
+        MainChatActivity.this.setTitle("Tarso Chat");
+        ColorDrawable colorDrawable
+                = new ColorDrawable(Color.parseColor("#0080B3"));
+        Objects.requireNonNull(MainChatActivity.this.getSupportActionBar()).setBackgroundDrawable(colorDrawable);
+        Objects.requireNonNull(MainChatActivity.this.getSupportActionBar()).setElevation(0f);
 
         /*Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");*/
 
-        /*profile_image = findViewById(R.id.profile_image);
-        username = findViewById(R.id.username);*/
+        profile_image = findViewById(R.id.profile_image);
+        username = findViewById(R.id.username);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        reference = FirebaseFirestore.getInstance().collection("Usuarios").document(firebaseUser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
         final ViewPager viewPager = findViewById(R.id.view_pager);
 
-        /*reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        /*reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usuarios user = documentSnapshot.toObject(Usuarios.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Usuarios user = dataSnapshot.getValue(Usuarios.class);
                 username.setText(user.getNombre());
                 if (user.getImageURL().equals("default")){
                     profile_image.setImageResource(R.mipmap.ic_launcher);
                 } else {
+
                     //change this
                     Picasso.get().load(user.getImageURL()).into(profile_image);
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });*/
 
-        db.collection("Chats").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                            int unread = 0;
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Chat chat = document.toObject(Chat.class);
-                                if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-                                    unread++;
-                                }
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
 
-                            if (unread == 0){
-                                viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
-                            } else {
-                                viewPagerAdapter.addFragment(new ChatsFragment(), "("+unread+") Chats");
-                            }
-
-                            viewPagerAdapter.addFragment(new UsersFragment(), "Usuario");
-                            viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
-
-                            viewPager.setAdapter(viewPagerAdapter);
-
-                            tabLayout.setupWithViewPager(viewPager);
-
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+                int unread = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
+                        unread++;
                     }
-                });
+                }
+
+                if (unread == 0){
+                    viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
+                } else {
+                    viewPagerAdapter.addFragment(new ChatsFragment(), "("+unread+") Chats");
+                }
+
+                viewPagerAdapter.addFragment(new UsersFragment(), "Usuarios");
+                viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
+
+                viewPager.setAdapter(viewPagerAdapter);
+
+                tabLayout.setupWithViewPager(viewPager);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+
+            case  R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                // change this code beacuse your app will crash
+                startActivity(new Intent(MainChatActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                finish();
+                return true;
+        }
+
+        return false;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -157,17 +195,12 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     private void status(String status){
-        reference = FirebaseFirestore.getInstance().collection("Usuarios").document(firebaseUser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
 
-        reference.update(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("TAG", "Documento actualizado!!");
-            }
-        });
+        reference.updateChildren(hashMap);
     }
 
     @Override

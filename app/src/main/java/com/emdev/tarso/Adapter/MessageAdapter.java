@@ -55,16 +55,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.show_message.setText(chat.getMessage());
 
         if (imageurl.equals("default")){
-            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
+            holder.profile_image.setImageResource(R.drawable.ic_notification);
         } else {
             Picasso.get().load(imageurl).into(holder.profile_image);
         }
 
         if (position == mChat.size()-1){
             if (chat.isIsseen()){
-                holder.txt_seen.setText("✔✔");
+                holder.txt_seen.setText("✓✓");
             } else {
-                holder.txt_seen.setText("✔");
+                holder.txt_seen.setText("✓");
             }
         } else {
             holder.txt_seen.setVisibility(View.GONE);

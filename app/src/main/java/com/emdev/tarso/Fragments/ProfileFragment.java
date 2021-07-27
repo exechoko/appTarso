@@ -26,6 +26,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,9 +52,8 @@ public class ProfileFragment extends Fragment {
     CircleImageView image_profile;
     TextView username;
 
-    DocumentReference reference;
+    DatabaseReference reference;
     FirebaseUser fuser;
-    FirebaseFirestore db;
 
     StorageReference storageReference;
     private static final int IMAGE_REQUEST = 1;
@@ -69,33 +73,17 @@ public class ProfileFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        reference = FirebaseFirestore.getInstance().collection("Usuarios").document(fuser.getUid());
-        //reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
-        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usuarios user = documentSnapshot.toObject(Usuarios.class);
-                username.setText(user.getNombre());
-                if (user.getImageURL().equals("default")){
-                    image_profile.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Picasso.get().load(user.getImageURL()).into(image_profile);
-                }
-            }
-        });
-
-
-        /*reference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+                Usuarios user = dataSnapshot.getValue(Usuarios.class);
+                username.setText(user.getNombre());
                 if (user.getImageURL().equals("default")){
-                    image_profile.setImageResource(R.mipmap.ic_launcher);
+                    image_profile.setImageResource(R.drawable.ic_notification);
                 } else {
-                    Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
+                    Picasso.get().load(user.getImageURL()).into(image_profile);
                 }
             }
 
@@ -103,7 +91,7 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
+        });
 
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,14 +111,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private String getFileExtension(Uri uri){
-        ContentResolver contentResolver = getContext().getContentResolver();
+        ContentResolver contentResolver = getActivity().getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     private void uploadImage(){
-        final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Uploading");
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("Subiendo");
         pd.show();
 
         if (imageUri != null){
@@ -154,32 +142,26 @@ public class ProfileFragment extends Fragment {
                         Uri downloadUri = task.getResult();
                         String mUri = downloadUri.toString();
 
-                        reference = FirebaseFirestore.getInstance().collection("Usuarios").document(fuser.getUid());
+                        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("imageURL", ""+mUri);
-                        reference.update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("TAG", "Documento actualizado!!");
-                            }
-                        });
-                        /*reference.updateChildren(map);*/
+                        reference.updateChildren(map);
 
                         pd.dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Falló!", Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                 }
             });
         } else {
-            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No seleccionó una imagen", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -192,7 +174,7 @@ public class ProfileFragment extends Fragment {
             imageUri = data.getData();
 
             if (uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Subida en proceso", Toast.LENGTH_SHORT).show();
             } else {
                 uploadImage();
             }

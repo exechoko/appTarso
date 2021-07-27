@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistroEstActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class RegistroEstActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,9 @@ public class RegistroEstActivity extends AppCompatActivity {
                             Usuarios estudiante = new Usuarios(edtNombre.getText().toString(), pass, edtDni.getText().toString(), correo, "NO", edtTelefono.getText().toString(), user.getUid());
                             String uid = user.getUid();
                             db.collection("Usuarios").document(uid).set(estudiante);
+
+                            reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                            reference.setValue(estudiante);
 
                             //Una vez crea la cuenta redigir al Menu Estudiante pasame ID para cargar perfil
                             Intent irAMenuEstudiante = new Intent(RegistroEstActivity.this,MenuEstudiantesActivity.class);
