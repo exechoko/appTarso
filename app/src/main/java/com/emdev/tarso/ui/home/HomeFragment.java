@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void LoadWeb() {
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        //webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         //webView.getSettings().setJavaScriptEnabled(true);
