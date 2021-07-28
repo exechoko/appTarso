@@ -5,12 +5,14 @@ public class Chat {
     private String receiver;
     private String message;
     private boolean isseen;
+    private String fecha;
 
-    public Chat(String sender, String receiver, String message, boolean isseen) {
+    public Chat(String sender, String receiver, String message, boolean isseen, String fecha) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
         this.isseen = isseen;
+        this.fecha = fecha;
     }
 
     public Chat() {
@@ -46,5 +48,13 @@ public class Chat {
 
     public void setIsseen(boolean isseen) {
         this.isseen = isseen;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

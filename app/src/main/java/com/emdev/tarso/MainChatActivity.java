@@ -48,8 +48,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import github.chenupt.springindicator.SpringIndicator;
-import github.chenupt.springindicator.viewpager.ScrollerViewPager;
+
 
 public class MainChatActivity extends AppCompatActivity {
 

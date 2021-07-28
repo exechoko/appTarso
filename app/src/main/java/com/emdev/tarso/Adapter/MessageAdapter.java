@@ -53,6 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Chat chat = mChat.get(position);
 
         holder.show_message.setText(chat.getMessage());
+        holder.txt_fecha.setText(chat.getFecha());
 
         if (imageurl.equals("default")){
             holder.profile_image.setImageResource(R.drawable.ic_notification);
@@ -82,6 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public TextView show_message;
         public ImageView profile_image;
         public TextView txt_seen;
+        public TextView txt_fecha;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -89,6 +91,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.profile_image);
             txt_seen = itemView.findViewById(R.id.txt_seen);
+            txt_fecha = itemView.findViewById(R.id.txt_fecha);
         }
     }
 

@@ -9,8 +9,8 @@ android {
         applicationId "com.emdev.tarso"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 12
-        versionName "2.0.1"
+        versionCode 13
+        versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,8 +66,6 @@ dependencies {
 //    implementation 'com.github.CanHub:Android-Image-Cropper:3.1.2'
 //    implementation 'id.zelory:compressor:2.1.0'
 
-    //animacion del tablayout del chat
-    implementation 'com.github.chenupt.android:springindicator:1.0.2@aar'
 
     implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.0'

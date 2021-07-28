@@ -48,7 +48,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -190,11 +192,17 @@ public class MessageActivity extends AppCompatActivity {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+        String ahora;
+        SimpleDateFormat currentDate1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date now = new Date(System.currentTimeMillis());
+        ahora = currentDate1.format(now);
+
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("isseen", false);
+        hashMap.put("fecha", ahora);
 
         reference.child("Chats").push().setValue(hashMap);
 

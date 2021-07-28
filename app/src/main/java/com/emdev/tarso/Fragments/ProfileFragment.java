@@ -1,5 +1,6 @@
 package com.emdev.tarso.Fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emdev.tarso.MenuDocentesActivity;
 import com.emdev.tarso.R;
 import com.emdev.tarso.model.Usuarios;
 import com.google.android.gms.tasks.Continuation;
@@ -39,13 +42,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-
 
 public class ProfileFragment extends Fragment {
 
@@ -57,6 +62,7 @@ public class ProfileFragment extends Fragment {
 
     StorageReference storageReference;
     private static final int IMAGE_REQUEST = 1;
+    //private static final int PICK_IMAGE_PROFILE = 101;
     private Uri imageUri;
     private StorageTask uploadTask;
 
@@ -108,6 +114,10 @@ public class ProfileFragment extends Fragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, IMAGE_REQUEST);
+
+        /* Para usar el CROP
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE_PROFILE);*/
     }
 
     private String getFileExtension(Uri uri){
@@ -161,6 +171,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
+            pd.dismiss();
             Toast.makeText(getActivity(), "No seleccionó una imagen", Toast.LENGTH_SHORT).show();
         }
     }
@@ -179,5 +190,25 @@ public class ProfileFragment extends Fragment {
                 uploadImage();
             }
         }
+
+        /*if (requestCode == PICK_IMAGE_PROFILE  && resultCode == -1) {
+
+            //getActivity antes this
+            CropImage.activity(CropImage.getPickImageResultUri(getActivity(), data)).setGuidelines(CropImageView.Guidelines.ON).start(getContext(),this);
+            //bandera = "FOTO";
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == -1) {
+                //File file = new File(result.getUri().getPath());
+
+                uploadImage();
+
+
+            }
+        }*/
+
     }
 }
