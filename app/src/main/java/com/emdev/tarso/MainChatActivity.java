@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import github.chenupt.springindicator.SpringIndicator;
+import github.chenupt.springindicator.viewpager.ScrollerViewPager;
 
 public class MainChatActivity extends AppCompatActivity {
 
@@ -78,7 +80,9 @@ public class MainChatActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
+
         final ViewPager viewPager = findViewById(R.id.view_pager);
+
 
         /*reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -126,6 +130,7 @@ public class MainChatActivity extends AppCompatActivity {
                 viewPager.setAdapter(viewPagerAdapter);
 
                 tabLayout.setupWithViewPager(viewPager);
+
 
             }
 

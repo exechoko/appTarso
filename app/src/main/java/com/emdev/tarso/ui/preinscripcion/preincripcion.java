@@ -101,11 +101,10 @@ public class preincripcion extends Fragment {
     private void mostrarWebView(String url) {
         webView.setVisibility(View.VISIBLE);
 
-        if (Build.VERSION.SDK_INT >= 19) {
-            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        }
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
-        webView.getSettings().setJavaScriptEnabled(true);
+        //webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
     }

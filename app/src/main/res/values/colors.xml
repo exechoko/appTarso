@@ -8,4 +8,9 @@
     <color name="black">#A8000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#A84500</color>
+
+    <color name="indicator_1">#52B100</color>
+    <color name="indicator_2">#0086A8</color>
+    <color name="indicator_3">#A80000</color>
+
 </resources>
