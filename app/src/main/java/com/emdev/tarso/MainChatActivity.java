@@ -49,7 +49,6 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class MainChatActivity extends AppCompatActivity {
 
     CircleImageView profile_image;

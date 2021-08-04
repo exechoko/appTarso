@@ -3,11 +3,14 @@ package com.emdev.tarso.Fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -16,11 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emdev.tarso.MenuDocentesActivity;
 import com.emdev.tarso.R;
+import com.emdev.tarso.model.Foto;
 import com.emdev.tarso.model.Usuarios;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +43,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -57,11 +63,13 @@ public class ProfileFragment extends Fragment {
     CircleImageView image_profile;
     TextView username;
 
+    Button btnSelect, btnUpload;
+
     DatabaseReference reference;
     FirebaseUser fuser;
 
     StorageReference storageReference;
-    private static final int IMAGE_REQUEST = 1;
+    private static final int PICK_IMAGE = 100;
     //private static final int PICK_IMAGE_PROFILE = 101;
     private Uri imageUri;
     private StorageTask uploadTask;
@@ -102,23 +110,68 @@ public class ProfileFragment extends Fragment {
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openImage();
+                cambiarProfleImagen();
             }
         });
 
         return view;
     }
 
+    private void cambiarProfleImagen() {
+        final AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity())
+                .setTitle("Cambiar imagen de perfil ... ")
+                .setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View agregar_foto_perfil = inflater.inflate(R.layout.imagen_perfil, null);
+
+        btnSelect = agregar_foto_perfil.findViewById(R.id.btnSelect);
+        btnUpload = agregar_foto_perfil.findViewById(R.id.btnUpload);
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImage();
+                //CropImage.startPickImageActivity(MenuDocentesActivity.this);
+            }
+        });
+
+        alerta.setView(agregar_foto_perfil);
+        alerta.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                /*if (edtNombreCreador.getText().toString().equals("")) {
+                    Toast.makeText(MenuDocentesActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                } else if (slider_noti != null){
+                    String uid = String.valueOf(System.currentTimeMillis());
+                    db.collection("Slider").document(uid).set(slider_noti);
+                    Toast.makeText(MenuDocentesActivity.this, "Agregada correctamente", Toast.LENGTH_SHORT).show();
+                }*/
+            }
+        });
+
+        alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta.show();
+    }
+
     private void openImage() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    /*private void openImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, IMAGE_REQUEST);
 
-        /* Para usar el CROP
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, PICK_IMAGE_PROFILE);*/
-    }
+    }*/
 
     private String getFileExtension(Uri uri){
         ContentResolver contentResolver = getActivity().getContentResolver();
@@ -126,7 +179,7 @@ public class ProfileFragment extends Fragment {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    private void uploadImage(){
+    /*private void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(getActivity());
         pd.setMessage("Subiendo");
         pd.show();
@@ -174,9 +227,97 @@ public class ProfileFragment extends Fragment {
             pd.dismiss();
             Toast.makeText(getActivity(), "No seleccionó una imagen", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*if (requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            btnUpload.setEnabled(true);
+            btnSelect.setText("Archivo selec.");
+            btnSelect.setEnabled(false);
+
+            btnUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    subirArchivoPDF(data.getData());
+                    btnUpload.setText("ARC. almac.");
+                    btnUpload.setEnabled(false);
+                    Log.d("Nombre uri", data.toString());
+
+                }
+            });
+
+        }*/
+
+        if (requestCode == PICK_IMAGE  && resultCode == -1) {
+            CropImage.activity(CropImage.getPickImageResultUri(getContext(), data)).setGuidelines(CropImageView.Guidelines.ON).start(getContext(),this);
+
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            //Uri resultUri = result.getUri();
+            if (resultCode == -1) {
+                File file = new File(result.getUri().getPath());
+
+                btnUpload.setEnabled(true);
+                btnSelect.setText("IMG selec.");
+                btnSelect.setEnabled(false);
+
+                btnUpload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subirImagenProfile(result.getUri());
+                        btnUpload.setText("IMG. almac.");
+                        btnUpload.setEnabled(false);
+                        Log.d("Nombre uri", data.toString());
+
+                    }
+                });
+            }
+        }
+
+    }
+
+    private void subirImagenProfile(Uri data) {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
+
+        //Ruta en el Storage
+        StorageReference storageReference1 = storageReference.child(System.currentTimeMillis() + ".jpg");
+        storageReference1.putFile(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete());
+                            Uri downloadUri = uriTask.getResult();
+                            String mUri = downloadUri.toString();
+
+                            reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("imageURL", ""+mUri);
+                            reference.updateChildren(map);
+
+                            Toast.makeText(getActivity(), "Foto subida correctamente", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progress = (100.0 * snapshot.getBytesTransferred())/snapshot.getTotalByteCount();
+                        progressDialog.setMessage("Subiendo foto ... " + (int) progress + "%");
+                    }
+                });
+    }
+
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -191,24 +332,5 @@ public class ProfileFragment extends Fragment {
             }
         }
 
-        /*if (requestCode == PICK_IMAGE_PROFILE  && resultCode == -1) {
-
-            //getActivity antes this
-            CropImage.activity(CropImage.getPickImageResultUri(getActivity(), data)).setGuidelines(CropImageView.Guidelines.ON).start(getContext(),this);
-            //bandera = "FOTO";
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            if (resultCode == -1) {
-                //File file = new File(result.getUri().getPath());
-
-                uploadImage();
-
-
-            }
-        }*/
-
-    }
+    }*/
 }
