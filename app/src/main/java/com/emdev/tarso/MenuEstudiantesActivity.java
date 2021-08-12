@@ -301,7 +301,15 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                seleccionarImagen();
+                if (edtNombreCreador.getText().toString().equals("")
+                        || edtNombreTrabajo.getText().toString().equals("")
+                        || mat.equals("") || mat.equals("Seleccione") || cur.equals("") || cur.equals("0")){
+                    Toast.makeText(MenuEstudiantesActivity.this, "Complete Nombre, Asignatura y Curso", Toast.LENGTH_SHORT).show();
+                } else {
+                    seleccionarImagen();
+                }
+
+
             }
         });
 
@@ -394,7 +402,13 @@ public class MenuEstudiantesActivity extends AppCompatActivity {
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                seleccionarPDF();
+                if (edtNombreCreador.getText().toString().equals("")
+                        || edtNombreTrabajo.getText().toString().equals("")
+                        || mat.equals("") || mat.equals("Seleccione") || cur.equals("") || cur.equals("0")){
+                    Toast.makeText(MenuEstudiantesActivity.this, "Complete Nombre, Asignatura y Curso", Toast.LENGTH_SHORT).show();
+                } else {
+                    seleccionarPDF();
+                }
             }
         });
 
