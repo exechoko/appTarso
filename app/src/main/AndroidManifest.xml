@@ -5,6 +5,7 @@
 
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -12,7 +13,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL"
+        tools:ignore="ReservedSystemPermission" />
 
     <application
         android:allowBackup="true"
@@ -32,61 +34,81 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/purple_700" />
 
-        <activity android:name=".LoginActivity"
-            android:parentActivityName=".StartActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".StartActivity"
+            android:exported="false"/>
         <activity android:name=".MainChatActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".StartActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".MessageActivity"
+            android:exported="false"
             android:parentActivityName=".MainChatActivity"/>
         <activity
             android:name=".QrActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RadioActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RegistroProfActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ResetPaswordActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RegistroEstActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".NoticiasActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".TrabajosDocentesActivity"
+            android:exported="false"
             android:parentActivityName=".MenuDocentesActivity" />
         <activity
             android:name=".TrabajosActivity"
+            android:exported="false"
             android:parentActivityName=".MenuEstudiantesActivity" />
         <activity
             android:name=".MenuEstudiantesActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MenuDocentesActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".TraductorActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".QuimicaActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".MapasActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".calculadoraActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tarso.NoActionBar"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -96,10 +118,12 @@
         </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:exported="false"
             android:theme="@style/Base.Theme.AppCompat" />
 
         <service
